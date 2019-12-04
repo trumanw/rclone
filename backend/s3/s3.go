@@ -42,17 +42,17 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/ncw/swift"
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/config/configstruct"
-	"github.com/rclone/rclone/fs/encodings"
-	"github.com/rclone/rclone/fs/fserrors"
-	"github.com/rclone/rclone/fs/fshttp"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/fs/walk"
-	"github.com/rclone/rclone/lib/bucket"
-	"github.com/rclone/rclone/lib/pacer"
-	"github.com/rclone/rclone/lib/rest"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/config/configstruct"
+	"github.com/trumanw/rclone/fs/encodings"
+	"github.com/trumanw/rclone/fs/fserrors"
+	"github.com/trumanw/rclone/fs/fshttp"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/fs/walk"
+	"github.com/trumanw/rclone/lib/bucket"
+	"github.com/trumanw/rclone/lib/pacer"
+	"github.com/trumanw/rclone/lib/rest"
 )
 
 const enc = encodings.S3
@@ -1267,7 +1267,7 @@ func (f *Fs) list(ctx context.Context, bucket, directory, prefix string, addBuck
 	// it doesn't encode CommonPrefixes.
 	// See: https://tracker.ceph.com/issues/41870
 	//
-	// This does not work under IBM COS also: See https://github.com/rclone/rclone/issues/3345
+	// This does not work under IBM COS also: See https://github.com/trumanw/rclone/issues/3345
 	// though maybe it does on some versions.
 	//
 	// This does work with minio but was only added relatively recently
@@ -1326,7 +1326,7 @@ func (f *Fs) list(ctx context.Context, bucket, directory, prefix string, addBuck
 			}
 			return err
 		}
-		// Refer to https://github.com/rclone/rclone/issues/3453
+		// Refer to https://github.com/trumanw/rclone/issues/3453
 		// if the response is empty & we are not listing a bucket
 		// the directory does not exist
 		if resp.Contents == nil && resp.CommonPrefixes == nil && directory != "" {

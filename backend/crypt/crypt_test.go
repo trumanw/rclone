@@ -6,13 +6,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/rclone/rclone/backend/crypt"
-	_ "github.com/rclone/rclone/backend/drive" // for integration tests
-	_ "github.com/rclone/rclone/backend/local"
-	_ "github.com/rclone/rclone/backend/swift" // for integration tests
-	"github.com/rclone/rclone/fs/config/obscure"
-	"github.com/rclone/rclone/fstest"
-	"github.com/rclone/rclone/fstest/fstests"
+	"github.com/trumanw/rclone/backend/crypt"
+	_ "github.com/trumanw/rclone/backend/drive" // for integration tests
+	_ "github.com/trumanw/rclone/backend/local"
+	_ "github.com/trumanw/rclone/backend/swift" // for integration tests
+	"github.com/trumanw/rclone/fs/config/obscure"
+	"github.com/trumanw/rclone/fstest"
+	"github.com/trumanw/rclone/fstest/fstests"
 )
 
 // TestIntegration runs integration tests against the remote

@@ -11,9 +11,9 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/putdotio/go-putio/putio"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/fserrors"
-	"github.com/rclone/rclone/fs/hash"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/fserrors"
+	"github.com/trumanw/rclone/fs/hash"
 )
 
 // Object describes a Putio object

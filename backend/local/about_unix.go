@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
+	"github.com/trumanw/rclone/fs"
 )
 
 // About gets quota information

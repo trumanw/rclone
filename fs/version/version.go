@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
+	"github.com/trumanw/rclone/fs"
 )
 
 // Version represents a parsed rclone version number

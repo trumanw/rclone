@@ -18,8 +18,8 @@ import (
 
 	bolt "github.com/etcd-io/bbolt"
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/walk"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/walk"
 )
 
 // Constants

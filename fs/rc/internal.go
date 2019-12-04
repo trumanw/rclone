@@ -10,10 +10,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/obscure"
-	"github.com/rclone/rclone/fs/version"
-	"github.com/rclone/rclone/lib/atexit"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/obscure"
+	"github.com/trumanw/rclone/fs/version"
+	"github.com/trumanw/rclone/lib/atexit"
 )
 
 func init() {

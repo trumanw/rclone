@@ -6,8 +6,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fstest/mockobject"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fstest/mockobject"
 	"github.com/stretchr/testify/assert"
 )
 

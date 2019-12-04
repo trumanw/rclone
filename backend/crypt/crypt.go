@@ -9,13 +9,13 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/accounting"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/config/configstruct"
-	"github.com/rclone/rclone/fs/config/obscure"
-	"github.com/rclone/rclone/fs/fspath"
-	"github.com/rclone/rclone/fs/hash"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/accounting"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/config/configstruct"
+	"github.com/trumanw/rclone/fs/config/obscure"
+	"github.com/trumanw/rclone/fs/fspath"
+	"github.com/trumanw/rclone/fs/hash"
 )
 
 // Globals

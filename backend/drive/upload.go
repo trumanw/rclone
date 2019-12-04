@@ -21,9 +21,9 @@ import (
 	"strconv"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/fserrors"
-	"github.com/rclone/rclone/lib/readers"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/fserrors"
+	"github.com/trumanw/rclone/lib/readers"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/googleapi"
 )

@@ -34,14 +34,14 @@ import (
 	"testing"
 	"time"
 
-	_ "github.com/rclone/rclone/backend/all" // import all backends
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/accounting"
-	"github.com/rclone/rclone/fs/filter"
-	"github.com/rclone/rclone/fs/fshttp"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/fs/operations"
-	"github.com/rclone/rclone/fstest"
+	_ "github.com/trumanw/rclone/backend/all" // import all backends
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/accounting"
+	"github.com/trumanw/rclone/fs/filter"
+	"github.com/trumanw/rclone/fs/fshttp"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/fs/operations"
+	"github.com/trumanw/rclone/fstest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

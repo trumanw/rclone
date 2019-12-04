@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/log"
-	"github.com/rclone/rclone/fs/operations"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/log"
+	"github.com/trumanw/rclone/fs/operations"
 )
 
 // File represents a file

@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/rc"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/rc"
 )
 
 func init() {

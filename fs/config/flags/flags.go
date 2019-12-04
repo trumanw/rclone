@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/rclone/rclone/fs"
+	"github.com/trumanw/rclone/fs"
 	"github.com/spf13/pflag"
 )
 

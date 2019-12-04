@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/flags"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/flags"
 )
 
 // Flags

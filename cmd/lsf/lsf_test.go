@@ -5,10 +5,10 @@ import (
 	"context"
 	"testing"
 
-	_ "github.com/rclone/rclone/backend/local"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/list"
-	"github.com/rclone/rclone/fstest"
+	_ "github.com/trumanw/rclone/backend/local"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/list"
+	"github.com/trumanw/rclone/fstest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

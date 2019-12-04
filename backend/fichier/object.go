@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/lib/rest"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/lib/rest"
 )
 
 // Object is a filesystem like object provided by an Fs

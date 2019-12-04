@@ -12,12 +12,12 @@ import (
 
 	"github.com/a8m/tree"
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/cmd"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/flags"
-	"github.com/rclone/rclone/fs/dirtree"
-	"github.com/rclone/rclone/fs/log"
-	"github.com/rclone/rclone/fs/walk"
+	"github.com/trumanw/rclone/cmd"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/flags"
+	"github.com/trumanw/rclone/fs/dirtree"
+	"github.com/trumanw/rclone/fs/log"
+	"github.com/trumanw/rclone/fs/walk"
 	"github.com/spf13/cobra"
 )
 

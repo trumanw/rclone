@@ -228,7 +228,7 @@ If your names have spaces in you need to put them in `"`, eg
     rclone copy "E:\folder name\folder name\folder name" remote:backup
 
 If you are using the root directory on its own then don't quote it
-(see [#464](https://github.com/rclone/rclone/issues/464) for why), eg
+(see [#464](https://github.com/trumanw/rclone/issues/464) for why), eg
 
     rclone copy E:\ remote:backup
 
@@ -471,9 +471,9 @@ See `--copy-dest` and `--backup-dir`.
 Specify the location of the rclone config file.
 
 Normally the config file is in your home directory as a file called
-`.config/rclone/rclone.conf` (or `.rclone.conf` if created with an
+`.config/trumanw/rclone.conf` (or `.rclone.conf` if created with an
 older version). If `$XDG_CONFIG_HOME` is set it will be at
-`$XDG_CONFIG_HOME/rclone/rclone.conf`.
+`$XDG_CONFIG_HOME/trumanw/rclone.conf`.
 
 If there is a file `rclone.conf` in the same directory as the rclone
 executable it will be preferred. This file must be created manually
@@ -574,7 +574,7 @@ after transfer.
 
 This can be useful for transferring files to and from OneDrive which
 occasionally misreports the size of image files (see
-[#399](https://github.com/rclone/rclone/issues/399) for more info).
+[#399](https://github.com/trumanw/rclone/issues/399) for more info).
 
 ### -I, --ignore-times ###
 

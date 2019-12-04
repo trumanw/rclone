@@ -28,20 +28,20 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/config/configstruct"
-	"github.com/rclone/rclone/fs/config/obscure"
-	"github.com/rclone/rclone/fs/encodings"
-	"github.com/rclone/rclone/fs/fserrors"
-	"github.com/rclone/rclone/fs/fshttp"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/fs/walk"
-	"github.com/rclone/rclone/lib/dircache"
-	"github.com/rclone/rclone/lib/oauthutil"
-	"github.com/rclone/rclone/lib/pacer"
-	"github.com/rclone/rclone/lib/readers"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/config/configstruct"
+	"github.com/trumanw/rclone/fs/config/obscure"
+	"github.com/trumanw/rclone/fs/encodings"
+	"github.com/trumanw/rclone/fs/fserrors"
+	"github.com/trumanw/rclone/fs/fshttp"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/fs/walk"
+	"github.com/trumanw/rclone/lib/dircache"
+	"github.com/trumanw/rclone/lib/oauthutil"
+	"github.com/trumanw/rclone/lib/pacer"
+	"github.com/trumanw/rclone/lib/readers"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	drive_v2 "google.golang.org/api/drive/v2"
@@ -357,7 +357,7 @@ export URLs for drive documents.  Users have reported that the
 official export URLs can't export large documents, whereas these
 unofficial ones can.
 
-See rclone issue [#2243](https://github.com/rclone/rclone/issues/2243) for background,
+See rclone issue [#2243](https://github.com/trumanw/rclone/issues/2243) for background,
 [this google drive issue](https://issuetracker.google.com/issues/36761333) and
 [this helpful post](https://www.labnol.org/internet/direct-links-for-google-drive/28356/).`,
 			Advanced: true,
@@ -435,7 +435,7 @@ HTTP/2.  HTTP/2 is therefore disabled by default for the drive backend
 but can be re-enabled here.  When the issue is solved this flag will
 be removed.
 
-See: https://github.com/rclone/rclone/issues/3631
+See: https://github.com/trumanw/rclone/issues/3631
 
 `,
 			Advanced: true,
@@ -1097,7 +1097,7 @@ func NewFs(name, path string, m configmap.Mapper) (fs.Fs, error) {
 		}
 		// XXX: update the old f here instead of returning tempF, since
 		// `features` were already filled with functions having *f as a receiver.
-		// See https://github.com/rclone/rclone/issues/2182
+		// See https://github.com/trumanw/rclone/issues/2182
 		f.dirCache = tempF.dirCache
 		f.root = tempF.root
 		return f, fs.ErrorIsFile

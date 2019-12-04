@@ -103,7 +103,7 @@ The simplest fix is to run
 
 ## Install with docker ##
 
-The rclone maintains a [docker image for rclone](https://hub.docker.com/r/rclone/rclone).
+The rclone maintains a [docker image for rclone](https://hub.docker.com/r/trumanw/rclone).
 These images are autobuilt by docker hub from the rclone source based
 on a minimal Alpine linux image.
 
@@ -148,7 +148,7 @@ from the rclone image.
 Here are some commands tested on an Ubuntu 18.04.3 host:
 
 ```
-# config on host at ~/.config/rclone/rclone.conf
+# config on host at ~/.config/trumanw/rclone.conf
 # data on host at ~/data
 
 # make sure the config is ok by listing the remotes
@@ -179,7 +179,7 @@ Make sure you have at least [Go](https://golang.org/) 1.7
 installed.  [Download go](https://golang.org/dl/) if necessary.  The
 latest release is recommended. Then
 
-    git clone https://github.com/rclone/rclone.git
+    git clone https://github.com/trumanw/rclone.git
     cd rclone
     go build
     ./rclone version
@@ -188,11 +188,11 @@ You can also build and install rclone in the
 [GOPATH](https://github.com/golang/go/wiki/GOPATH) (which defaults to
 `~/go`) with:
 
-    go get -u -v github.com/rclone/rclone
+    go get -u -v github.com/trumanw/rclone
 
 and this will build the binary in `$GOPATH/bin` (`~/go/bin/rclone` by
 default) after downloading the source to
-`$GOPATH/src/github.com/rclone/rclone` (`~/go/src/github.com/rclone/rclone`
+`$GOPATH/src/github.com/trumanw/rclone` (`~/go/src/github.com/trumanw/rclone`
 by default).
 
 ## Installation with Ansible ##

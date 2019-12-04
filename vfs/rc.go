@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/rc"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/rc"
 )
 
 // Add remote control for the VFS

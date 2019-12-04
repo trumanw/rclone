@@ -16,8 +16,8 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/lib/readers"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/lib/readers"
 )
 
 // Client contains the info to sustain the API

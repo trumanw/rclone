@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/fserrors"
-	"github.com/rclone/rclone/fs/rc"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/fserrors"
+	"github.com/trumanw/rclone/fs/rc"
 )
 
 // MaxCompletedTransfers specifies maximum number of completed transfers in startedTransfers list

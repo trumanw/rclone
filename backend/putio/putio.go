@@ -5,12 +5,12 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/config/obscure"
-	"github.com/rclone/rclone/fs/encodings"
-	"github.com/rclone/rclone/lib/dircache"
-	"github.com/rclone/rclone/lib/oauthutil"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/config/obscure"
+	"github.com/trumanw/rclone/fs/encodings"
+	"github.com/trumanw/rclone/lib/dircache"
+	"github.com/trumanw/rclone/lib/oauthutil"
 	"golang.org/x/oauth2"
 )
 

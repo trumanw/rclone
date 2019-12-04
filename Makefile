@@ -44,13 +44,13 @@ endif
 .PHONY: rclone test_all vars version
 
 rclone:
-	go build -v --ldflags "-s -X github.com/rclone/rclone/fs.Version=$(TAG)" $(BUILDTAGS)
+	go build -v --ldflags "-s -X github.com/trumanw/rclone/fs.Version=$(TAG)" $(BUILDTAGS)
 	mkdir -p `go env GOPATH`/bin/
 	cp -av rclone`go env GOEXE` `go env GOPATH`/bin/rclone`go env GOEXE`.new
 	mv -v `go env GOPATH`/bin/rclone`go env GOEXE`.new `go env GOPATH`/bin/rclone`go env GOEXE`
 
 test_all:
-	go install --ldflags "-s -X github.com/rclone/rclone/fs.Version=$(TAG)" $(BUILDTAGS) github.com/rclone/rclone/fstest/test_all
+	go install --ldflags "-s -X github.com/trumanw/rclone/fs.Version=$(TAG)" $(BUILDTAGS) github.com/trumanw/rclone/fstest/test_all
 
 vars:
 	@echo SHELL="'$(SHELL)'"

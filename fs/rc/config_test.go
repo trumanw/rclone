@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/cmd/serve/httplib"
-	"github.com/rclone/rclone/fs"
+	"github.com/trumanw/rclone/cmd/serve/httplib"
+	"github.com/trumanw/rclone/fs"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
