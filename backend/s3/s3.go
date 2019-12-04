@@ -1326,6 +1326,12 @@ func (f *Fs) list(ctx context.Context, bucket, directory, prefix string, addBuck
 			}
 			return err
 		}
+		// Refer to https://github.com/rclone/rclone/issues/3453
+		// if the response is empty & we are not listing a bucket
+		// the directory does not exist
+		if resp.Contents == nil && resp.CommonPrefixes == nil && directory != "" {
+			return fs.ErrorDirNotFound
+		}
 		if !recurse {
 			for _, commonPrefix := range resp.CommonPrefixes {
 				if commonPrefix.Prefix == nil {
