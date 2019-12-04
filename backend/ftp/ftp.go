@@ -13,14 +13,14 @@ import (
 
 	"github.com/jlaffaye/ftp"
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/config/configstruct"
-	"github.com/rclone/rclone/fs/config/obscure"
-	"github.com/rclone/rclone/fs/encodings"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/lib/pacer"
-	"github.com/rclone/rclone/lib/readers"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/config/configstruct"
+	"github.com/trumanw/rclone/fs/config/obscure"
+	"github.com/trumanw/rclone/fs/encodings"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/lib/pacer"
+	"github.com/trumanw/rclone/lib/readers"
 )
 
 const enc = encodings.FTP

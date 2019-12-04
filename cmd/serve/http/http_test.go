@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	_ "github.com/rclone/rclone/backend/local"
-	"github.com/rclone/rclone/cmd/serve/httplib"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config"
-	"github.com/rclone/rclone/fs/filter"
+	_ "github.com/trumanw/rclone/backend/local"
+	"github.com/trumanw/rclone/cmd/serve/httplib"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config"
+	"github.com/trumanw/rclone/fs/filter"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

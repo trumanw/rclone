@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/backend/crypt"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/walk"
+	"github.com/trumanw/rclone/backend/crypt"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/walk"
 )
 
 // ListJSONItem in the struct which gets marshalled for each line

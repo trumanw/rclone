@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/fstest"
-	"github.com/rclone/rclone/lib/file"
-	"github.com/rclone/rclone/lib/readers"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/fstest"
+	"github.com/trumanw/rclone/lib/file"
+	"github.com/trumanw/rclone/lib/readers"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

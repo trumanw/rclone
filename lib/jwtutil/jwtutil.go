@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/lib/oauthutil"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/lib/oauthutil"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/jws"

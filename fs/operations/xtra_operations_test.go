@@ -30,9 +30,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/operations"
-	"github.com/rclone/rclone/fstest"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/operations"
+	"github.com/trumanw/rclone/fstest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

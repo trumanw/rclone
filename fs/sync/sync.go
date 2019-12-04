@@ -9,13 +9,14 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/accounting"
-	"github.com/rclone/rclone/fs/filter"
-	"github.com/rclone/rclone/fs/fserrors"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/fs/march"
-	"github.com/rclone/rclone/fs/operations"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/accounting"
+	"github.com/trumanw/rclone/fs/filter"
+	"github.com/trumanw/rclone/fs/fserrors"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/fs/ignore"
+	"github.com/trumanw/rclone/fs/march"
+	"github.com/trumanw/rclone/fs/operations"
 )
 
 type syncCopyMove struct {
@@ -62,6 +63,7 @@ type syncCopyMove struct {
 	renameCheck     []fs.Object            // accumulate files to check for rename here
 	compareCopyDest fs.Fs                  // place to check for files to server side copy
 	backupDir       fs.Fs                  // place to store overwrites/deletes
+	ignorer         *ignore.GitIgnore      // .rcignore file matcher
 }
 
 func newSyncCopyMove(ctx context.Context, fdst, fsrc fs.Fs, deleteMode fs.DeleteMode, DoMove bool, deleteEmptySrcDirs bool, copyEmptySrcDirs bool) (*syncCopyMove, error) {
@@ -89,6 +91,7 @@ func newSyncCopyMove(ctx context.Context, fdst, fsrc fs.Fs, deleteMode fs.Delete
 		commonHash:         fsrc.Hashes().Overlap(fdst.Hashes()).GetOne(),
 		toBeRenamed:        newPipe(accounting.Stats(ctx).SetRenameQueue, fs.Config.MaxBacklog),
 		trackRenamesCh:     make(chan fs.Object, fs.Config.Checkers),
+		ignorer:            nil,
 	}
 	s.ctx, s.cancel = context.WithCancel(ctx)
 	if s.noTraverse && s.deleteMode != fs.DeleteModeOff {
@@ -140,6 +143,11 @@ func newSyncCopyMove(ctx context.Context, fdst, fsrc fs.Fs, deleteMode fs.Delete
 		if err != nil {
 			return nil, err
 		}
+	}
+	// Compile ignore file
+	ignoreFile := fmt.Sprintf("%v", ctx.Value("IgnoreFile"))
+	if ignoreMatcher, err := ignore.CompileIgnoreFile(ignoreFile); err == nil {
+		s.ignorer = ignoreMatcher
 	}
 	return s, nil
 }
@@ -291,6 +299,12 @@ func (s *syncCopyMove) pairCopyOrMove(ctx context.Context, in *pipe, fdst fs.Fs,
 			return
 		}
 		src := pair.Src
+		// ignore files if listed in the ignoreFile
+		if s.ignorer != nil {
+			if s.ignorer.MatchesPath(src.String()) {
+				continue
+			}
+		}
 		if s.DoMove {
 			_, err = operations.Move(ctx, fdst, pair.Dst, src.Remote(), src)
 		} else {

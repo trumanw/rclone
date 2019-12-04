@@ -10,9 +10,9 @@ import (
 
 	"github.com/billziss-gh/cgofuse/fuse"
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/cmd/cmount"
-	"github.com/rclone/rclone/cmd/mountlib"
-	"github.com/rclone/rclone/fs"
+	"github.com/trumanw/rclone/cmd/cmount"
+	"github.com/trumanw/rclone/cmd/mountlib"
+	"github.com/trumanw/rclone/fs"
 	"github.com/stretchr/testify/require"
 )
 

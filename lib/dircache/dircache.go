@@ -12,7 +12,7 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
+	"github.com/trumanw/rclone/fs"
 )
 
 // DirCache caches paths to directory IDs and vice versa

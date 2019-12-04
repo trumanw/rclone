@@ -8,9 +8,9 @@ import (
 
 	"bazil.org/fuse"
 	fusefs "bazil.org/fuse/fs"
-	"github.com/rclone/rclone/cmd/mountlib"
-	"github.com/rclone/rclone/fs/log"
-	"github.com/rclone/rclone/vfs"
+	"github.com/trumanw/rclone/cmd/mountlib"
+	"github.com/trumanw/rclone/fs/log"
+	"github.com/trumanw/rclone/vfs"
 )
 
 // File represents a file

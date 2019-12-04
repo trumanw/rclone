@@ -19,13 +19,13 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/cmd"
-	"github.com/rclone/rclone/cmd/info/internal"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/flags"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/fs/object"
-	"github.com/rclone/rclone/lib/random"
+	"github.com/trumanw/rclone/cmd"
+	"github.com/trumanw/rclone/cmd/info/internal"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/flags"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/fs/object"
+	"github.com/trumanw/rclone/lib/random"
 	"github.com/spf13/cobra"
 )
 

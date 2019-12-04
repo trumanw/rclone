@@ -16,7 +16,7 @@ Forum for questions and general discussion:
 
 The project website is at:
 
-  * https://github.com/rclone/rclone
+  * https://github.com/trumanw/rclone
 
 There you can file bug reports or contribute pull requests.
 

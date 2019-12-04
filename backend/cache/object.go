@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/lib/readers"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/lib/readers"
 )
 
 const (

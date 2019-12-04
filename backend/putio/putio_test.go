@@ -4,7 +4,7 @@ package putio
 import (
 	"testing"
 
-	"github.com/rclone/rclone/fstest/fstests"
+	"github.com/trumanw/rclone/fstest/fstests"
 )
 
 // TestIntegration runs integration tests against the remote

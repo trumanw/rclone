@@ -17,12 +17,12 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/config/configstruct"
-	"github.com/rclone/rclone/fs/fshttp"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/lib/rest"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/config/configstruct"
+	"github.com/trumanw/rclone/fs/fshttp"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/lib/rest"
 	"golang.org/x/net/html"
 )
 

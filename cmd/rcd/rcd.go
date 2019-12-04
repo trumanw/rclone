@@ -13,13 +13,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rclone/rclone/cmd"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config"
-	"github.com/rclone/rclone/fs/rc/rcflags"
-	"github.com/rclone/rclone/fs/rc/rcserver"
-	"github.com/rclone/rclone/lib/errors"
-	"github.com/rclone/rclone/lib/random"
+	"github.com/trumanw/rclone/cmd"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config"
+	"github.com/trumanw/rclone/fs/rc/rcflags"
+	"github.com/trumanw/rclone/fs/rc/rcserver"
+	"github.com/trumanw/rclone/lib/errors"
+	"github.com/trumanw/rclone/lib/random"
 	"github.com/spf13/cobra"
 )
 
@@ -196,7 +196,7 @@ func unzip(src, dest string) (err error) {
 	// Closure to address file descriptors issue with all the deferred .Close() methods
 	extractAndWriteFile := func(f *zip.File) error {
 		path := filepath.Join(dest, f.Name)
-		// Check for Zip Slip: https://github.com/rclone/rclone/issues/3529
+		// Check for Zip Slip: https://github.com/trumanw/rclone/issues/3529
 		if !strings.HasPrefix(path, dest) {
 			return fmt.Errorf("%s: illegal file path", path)
 		}

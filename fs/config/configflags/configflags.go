@@ -9,11 +9,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config"
-	"github.com/rclone/rclone/fs/config/flags"
-	fsLog "github.com/rclone/rclone/fs/log"
-	"github.com/rclone/rclone/fs/rc"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config"
+	"github.com/trumanw/rclone/fs/config/flags"
+	fsLog "github.com/trumanw/rclone/fs/log"
+	"github.com/trumanw/rclone/fs/rc"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 )

@@ -8,11 +8,11 @@ import (
 	"sort"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/cmd"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config"
-	"github.com/rclone/rclone/fs/config/flags"
-	"github.com/rclone/rclone/fs/rc"
+	"github.com/trumanw/rclone/cmd"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config"
+	"github.com/trumanw/rclone/fs/config/flags"
+	"github.com/trumanw/rclone/fs/rc"
 	"github.com/spf13/cobra"
 )
 

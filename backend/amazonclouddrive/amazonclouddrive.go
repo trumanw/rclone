@@ -24,17 +24,17 @@ import (
 
 	acd "github.com/ncw/go-acd"
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/config/configstruct"
-	"github.com/rclone/rclone/fs/encodings"
-	"github.com/rclone/rclone/fs/fserrors"
-	"github.com/rclone/rclone/fs/fshttp"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/lib/dircache"
-	"github.com/rclone/rclone/lib/oauthutil"
-	"github.com/rclone/rclone/lib/pacer"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/config/configstruct"
+	"github.com/trumanw/rclone/fs/encodings"
+	"github.com/trumanw/rclone/fs/fserrors"
+	"github.com/trumanw/rclone/fs/fshttp"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/lib/dircache"
+	"github.com/trumanw/rclone/lib/oauthutil"
+	"github.com/trumanw/rclone/lib/pacer"
 	"golang.org/x/oauth2"
 )
 
@@ -334,7 +334,7 @@ func NewFs(name, root string, m configmap.Mapper) (fs.Fs, error) {
 		}
 		// XXX: update the old f here instead of returning tempF, since
 		// `features` were already filled with functions having *f as a receiver.
-		// See https://github.com/rclone/rclone/issues/2182
+		// See https://github.com/trumanw/rclone/issues/2182
 		f.dirCache = tempF.dirCache
 		f.root = tempF.root
 		// return an error with an fs which points to the parent

@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/rclone/rclone/lib/encoder"
+	"github.com/trumanw/rclone/lib/encoder"
 )
 
 // Base only encodes the zero byte and slash

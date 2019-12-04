@@ -11,10 +11,10 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config"
-	"github.com/rclone/rclone/fs/hash"
-	"github.com/rclone/rclone/fs/walk"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config"
+	"github.com/trumanw/rclone/fs/hash"
+	"github.com/trumanw/rclone/fs/walk"
 	"github.com/spf13/pflag"
 )
 

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/ncw/swift"
-	"github.com/rclone/rclone/fs"
+	"github.com/trumanw/rclone/fs"
 )
 
 // auth is an authenticator for swift

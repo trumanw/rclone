@@ -762,7 +762,7 @@ export URLs for drive documents.  Users have reported that the
 official export URLs can't export large documents, whereas these
 unofficial ones can.
 
-See rclone issue [#2243](https://github.com/rclone/rclone/issues/2243) for background,
+See rclone issue [#2243](https://github.com/trumanw/rclone/issues/2243) for background,
 [this google drive issue](https://issuetracker.google.com/issues/36761333) and
 [this helpful post](https://www.labnol.org/internet/direct-links-for-google-drive/28356/).
 
@@ -880,7 +880,7 @@ HTTP/2.  HTTP/2 is therefore disabled by default for the drive backend
 but can be re-enabled here.  When the issue is solved this flag will
 be removed.
 
-See: https://github.com/rclone/rclone/issues/3631
+See: https://github.com/trumanw/rclone/issues/3631
 
 
 

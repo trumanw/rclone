@@ -3,21 +3,23 @@ package sync
 import (
 	"context"
 
-	"github.com/rclone/rclone/cmd"
-	"github.com/rclone/rclone/fs/config/flags"
-	"github.com/rclone/rclone/fs/operations"
-	"github.com/rclone/rclone/fs/sync"
 	"github.com/spf13/cobra"
+	"github.com/trumanw/rclone/cmd"
+	"github.com/trumanw/rclone/fs/config/flags"
+	"github.com/trumanw/rclone/fs/operations"
+	"github.com/trumanw/rclone/fs/sync"
 )
 
 var (
 	createEmptySrcDirs = false
+	ignoreFile         string
 )
 
 func init() {
 	cmd.Root.AddCommand(commandDefinition)
 	cmdFlags := commandDefinition.Flags()
 	flags.BoolVarP(cmdFlags, &createEmptySrcDirs, "create-empty-src-dirs", "", createEmptySrcDirs, "Create empty source dirs on destination after sync")
+	flags.StringVarP(cmdFlags, &ignoreFile, "ignore-file", "", "", "Specify the ignore file path as the filtering rules.")
 }
 
 var commandDefinition = &cobra.Command{
@@ -47,12 +49,15 @@ go there.
 `,
 	Run: func(command *cobra.Command, args []string) {
 		cmd.CheckArgs(2, 2, command, args)
+		c := context.WithValue(context.Background(), "IgnoreFile", ignoreFile)
 		fsrc, srcFileName, fdst := cmd.NewFsSrcFileDst(args)
 		cmd.Run(true, true, command, func() error {
 			if srcFileName == "" {
-				return sync.Sync(context.Background(), fdst, fsrc, createEmptySrcDirs)
+				// return sync.Sync(context.Background(), fdst, fsrc, createEmptySrcDirs)
+				return sync.Sync(c, fdst, fsrc, createEmptySrcDirs)
 			}
-			return operations.CopyFile(context.Background(), fdst, fsrc, srcFileName, srcFileName)
+			// return operations.CopyFile(context.Background(), fdst, fsrc, srcFileName, srcFileName)
+			return operations.CopyFile(c, fdst, fsrc, srcFileName, srcFileName)
 		})
 	},
 }

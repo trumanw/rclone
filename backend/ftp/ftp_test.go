@@ -4,8 +4,8 @@ package ftp_test
 import (
 	"testing"
 
-	"github.com/rclone/rclone/backend/ftp"
-	"github.com/rclone/rclone/fstest/fstests"
+	"github.com/trumanw/rclone/backend/ftp"
+	"github.com/trumanw/rclone/fstest/fstests"
 )
 
 // TestIntegration runs integration tests against the remote

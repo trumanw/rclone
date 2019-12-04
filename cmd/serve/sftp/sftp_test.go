@@ -12,11 +12,11 @@ import (
 	"testing"
 
 	"github.com/pkg/sftp"
-	_ "github.com/rclone/rclone/backend/local"
-	"github.com/rclone/rclone/cmd/serve/servetest"
-	"github.com/rclone/rclone/fs"
-	"github.com/rclone/rclone/fs/config/configmap"
-	"github.com/rclone/rclone/fs/config/obscure"
+	_ "github.com/trumanw/rclone/backend/local"
+	"github.com/trumanw/rclone/cmd/serve/servetest"
+	"github.com/trumanw/rclone/fs"
+	"github.com/trumanw/rclone/fs/config/configmap"
+	"github.com/trumanw/rclone/fs/config/obscure"
 	"github.com/stretchr/testify/assert"
 )
 
