@@ -1857,6 +1857,7 @@ func (o *Object) Hash(ctx context.Context, t hash.Type) (string, error) {
 			hash = ""
 		}
 	}
+	fmt.Println("HASH: ", hash)
 	return hash, nil
 }
 

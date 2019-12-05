@@ -324,12 +324,6 @@ const AzureBlob = encoder.MultiEncoder(
 		encoder.EncodeBackSlash |
 		encoder.EncodeRightPeriod)
 
-// QingStor is the encoding used by the qingstor backend
-const QingStor = encoder.MultiEncoder(
-	encoder.EncodeInvalidUtf8 |
-		encoder.EncodeCtl |
-		encoder.EncodeSlash)
-
 // Sharefile is the encoding used by the sharefile backend
 const Sharefile = encoder.MultiEncoder(
 	uint(Base) |
@@ -401,8 +395,6 @@ func ByName(name string) encoder.Encoder {
 		return PremiumizeMe
 	case "pcloud":
 		return Pcloud
-	case "qingstor":
-		return QingStor
 	case "s3":
 		return S3
 	case "sharefile":

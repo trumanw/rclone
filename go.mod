@@ -53,7 +53,8 @@ require (
 	github.com/t3rm1n4l/go-mega v0.0.0-20191014094753-e8695d78299a
 	github.com/xanzy/ssh-agent v0.2.1
 	github.com/youmark/pkcs8 v0.0.0-20191102193632-94c173a94d60
-	github.com/yunify/qingstor-sdk-go/v3 v3.1.1
+	github.com/yunify/qingstor-sdk-go v0.0.0-20191009100035-8afda555ada5
+	github.com/russross/blackfriday v1.5.2
 	go.etcd.io/bbolt v1.3.3 // indirect
 	go.opencensus.io v0.22.2 // indirect
 	goftp.io/server v0.0.0-20190812052725-72a57b186803

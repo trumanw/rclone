@@ -164,10 +164,6 @@ backends:
  - backend:  "fichier"
    remote:   "TestFichier:"
    fastlist: false
- - backend:  "qingstor"
-   remote:   "TestQingStor:"
-   fastlist: false
-   oneonly:  true
  - backend:  "azureblob"
    remote:   "TestAzureBlob:"
    fastlist: true
