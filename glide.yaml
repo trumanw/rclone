@@ -90,12 +90,6 @@ import:
 - package: github.com/skratchdot/open-golang
   subpackages:
   - open
-- package: github.com/spf13/cobra
-  version: ^0.0.5
-  subpackages:
-  - doc
-- package: github.com/spf13/pflag
-  version: ^1.0.5
 - package: github.com/stretchr/testify
   version: ^1.4.0
   subpackages:
