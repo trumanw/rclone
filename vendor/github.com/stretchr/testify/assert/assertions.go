@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"regexp"
 	"runtime"
+	"runtime/debug"
 	"strings"
 	"time"
 	"unicode"
@@ -21,7 +22,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-//go:generate go run ../_codegen/main.go -output-package=assert -template=assertion_format.go.tmpl
+//go:generate sh -c "cd ../_codegen && go build && cd - && ../_codegen/_codegen -output-package=assert -template=assertion_format.go.tmpl"
 
 // TestingT is an interface wrapper around *testing.T
 type TestingT interface {
@@ -362,24 +363,49 @@ func Same(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) b
 		h.Helper()
 	}
 
-	expectedPtr, actualPtr := reflect.ValueOf(expected), reflect.ValueOf(actual)
-	if expectedPtr.Kind() != reflect.Ptr || actualPtr.Kind() != reflect.Ptr {
-		return Fail(t, "Invalid operation: both arguments must be pointers", msgAndArgs...)
-	}
-
-	expectedType, actualType := reflect.TypeOf(expected), reflect.TypeOf(actual)
-	if expectedType != actualType {
-		return Fail(t, fmt.Sprintf("Pointer expected to be of type %v, but was %v",
-			expectedType, actualType), msgAndArgs...)
-	}
-
-	if expected != actual {
+	if !samePointers(expected, actual) {
 		return Fail(t, fmt.Sprintf("Not same: \n"+
 			"expected: %p %#v\n"+
 			"actual  : %p %#v", expected, expected, actual, actual), msgAndArgs...)
 	}
 
 	return true
+}
+
+// NotSame asserts that two pointers do not reference the same object.
+//
+//    assert.NotSame(t, ptr1, ptr2)
+//
+// Both arguments must be pointer variables. Pointer variable sameness is
+// determined based on the equality of both type and value.
+func NotSame(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) bool {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+
+	if samePointers(expected, actual) {
+		return Fail(t, fmt.Sprintf(
+			"Expected and actual point to the same object: %p %#v",
+			expected, expected), msgAndArgs...)
+	}
+	return true
+}
+
+// samePointers compares two generic interface objects and returns whether
+// they point to the same object
+func samePointers(first, second interface{}) bool {
+	firstPtr, secondPtr := reflect.ValueOf(first), reflect.ValueOf(second)
+	if firstPtr.Kind() != reflect.Ptr || secondPtr.Kind() != reflect.Ptr {
+		return false
+	}
+
+	firstType, secondType := reflect.TypeOf(first), reflect.TypeOf(second)
+	if firstType != secondType {
+		return false
+	}
+
+	// compare pointer addresses
+	return first == second
 }
 
 // formatUnequalValues takes two values of arbitrary types and returns string
@@ -901,15 +927,17 @@ func Condition(t TestingT, comp Comparison, msgAndArgs ...interface{}) bool {
 type PanicTestFunc func()
 
 // didPanic returns true if the function passed to it panics. Otherwise, it returns false.
-func didPanic(f PanicTestFunc) (bool, interface{}) {
+func didPanic(f PanicTestFunc) (bool, interface{}, string) {
 
 	didPanic := false
 	var message interface{}
+	var stack string
 	func() {
 
 		defer func() {
 			if message = recover(); message != nil {
 				didPanic = true
+				stack = string(debug.Stack())
 			}
 		}()
 
@@ -918,7 +946,7 @@ func didPanic(f PanicTestFunc) (bool, interface{}) {
 
 	}()
 
-	return didPanic, message
+	return didPanic, message, stack
 
 }
 
@@ -930,7 +958,7 @@ func Panics(t TestingT, f PanicTestFunc, msgAndArgs ...interface{}) bool {
 		h.Helper()
 	}
 
-	if funcDidPanic, panicValue := didPanic(f); !funcDidPanic {
+	if funcDidPanic, panicValue, _ := didPanic(f); !funcDidPanic {
 		return Fail(t, fmt.Sprintf("func %#v should panic\n\tPanic value:\t%#v", f, panicValue), msgAndArgs...)
 	}
 
@@ -946,12 +974,12 @@ func PanicsWithValue(t TestingT, expected interface{}, f PanicTestFunc, msgAndAr
 		h.Helper()
 	}
 
-	funcDidPanic, panicValue := didPanic(f)
+	funcDidPanic, panicValue, panickedStack := didPanic(f)
 	if !funcDidPanic {
 		return Fail(t, fmt.Sprintf("func %#v should panic\n\tPanic value:\t%#v", f, panicValue), msgAndArgs...)
 	}
 	if panicValue != expected {
-		return Fail(t, fmt.Sprintf("func %#v should panic with value:\t%#v\n\tPanic value:\t%#v", f, expected, panicValue), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("func %#v should panic with value:\t%#v\n\tPanic value:\t%#v\n\tPanic stack:\t%s", f, expected, panicValue, panickedStack), msgAndArgs...)
 	}
 
 	return true
@@ -965,8 +993,8 @@ func NotPanics(t TestingT, f PanicTestFunc, msgAndArgs ...interface{}) bool {
 		h.Helper()
 	}
 
-	if funcDidPanic, panicValue := didPanic(f); funcDidPanic {
-		return Fail(t, fmt.Sprintf("func %#v should not panic\n\tPanic value:\t%v", f, panicValue), msgAndArgs...)
+	if funcDidPanic, panicValue, panickedStack := didPanic(f); funcDidPanic {
+		return Fail(t, fmt.Sprintf("func %#v should not panic\n\tPanic value:\t%v\n\tPanic stack:\t%s", f, panicValue, panickedStack), msgAndArgs...)
 	}
 
 	return true
@@ -1475,24 +1503,26 @@ func Eventually(t TestingT, condition func() bool, waitFor time.Duration, tick t
 		h.Helper()
 	}
 
+	ch := make(chan bool, 1)
+
 	timer := time.NewTimer(waitFor)
-	ticker := time.NewTicker(tick)
-	checkPassed := make(chan bool)
 	defer timer.Stop()
+
+	ticker := time.NewTicker(tick)
 	defer ticker.Stop()
-	defer close(checkPassed)
-	for {
+
+	for tick := ticker.C; ; {
 		select {
 		case <-timer.C:
-			return Fail(t, "Condition never satisfied", msgAndArgs...)
-		case result := <-checkPassed:
-			if result {
+			return false
+		case <-tick:
+			tick = nil
+			go func() { ch <- condition() }()
+		case v := <-ch:
+			if v {
 				return true
 			}
-		case <-ticker.C:
-			go func() {
-				checkPassed <- condition()
-			}()
+			tick = ticker.C
 		}
 	}
 }
