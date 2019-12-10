@@ -47,6 +47,7 @@ import:
   - dropbox/team
   - dropbox/users
 - package: github.com/etcd-io/bbolt
+  version: a0458a2b35708eef59eb5f620ceb3cd1c01a824d
 - package: github.com/jlaffaye/ftp
 - package: github.com/jzelinskie/whirlpool
 - package: github.com/koofr/go-httpclient

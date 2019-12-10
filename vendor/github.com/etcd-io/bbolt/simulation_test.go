@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"math/rand"
 	"sync"
-	"sync/atomic"
 	"testing"
 
 	bolt "go.etcd.io/bbolt"
@@ -48,28 +47,15 @@ func testSimulate(t *testing.T, openOption *bolt.Options, round, threadCount, pa
 
 	var mutex sync.Mutex
 
+	// Run n threads in parallel, each with their own operation.
+	var wg sync.WaitGroup
+
 	for n := 0; n < round; n++ {
-		// Run n threads in parallel, each with their own operation.
+
 		var threads = make(chan bool, parallelism)
-		var wg sync.WaitGroup
-
-		// counter for how many goroutines were fired
-		var opCount int64
-
-		// counter for ignored operations
-		var igCount int64
-
-		var errCh = make(chan error, threadCount)
-
 		var i int
 		for {
-			// this buffered channel will keep accepting booleans
-			// until it hits the limit defined by the parallelism
-			// argument to testSimulate()
 			threads <- true
-
-			// this wait group can only be marked "done" from inside
-			// the subsequent goroutine
 			wg.Add(1)
 			writable := ((rand.Int() % 100) < 20) // 20% writers
 
@@ -84,12 +70,11 @@ func testSimulate(t *testing.T, openOption *bolt.Options, round, threadCount, pa
 			// Execute a thread for the given operation.
 			go func(writable bool, handler simulateHandler) {
 				defer wg.Done()
-				atomic.AddInt64(&opCount, 1)
+
 				// Start transaction.
 				tx, err := db.Begin(writable)
 				if err != nil {
-					errCh <- fmt.Errorf("error tx begin: %v", err)
-					return
+					t.Fatal("tx begin: ", err)
 				}
 
 				// Obtain current state of the dataset.
@@ -108,8 +93,7 @@ func testSimulate(t *testing.T, openOption *bolt.Options, round, threadCount, pa
 						mutex.Unlock()
 
 						if err := tx.Commit(); err != nil {
-							errCh <- err
-							return
+							t.Fatal(err)
 						}
 					}()
 				} else {
@@ -118,7 +102,6 @@ func testSimulate(t *testing.T, openOption *bolt.Options, round, threadCount, pa
 
 				// Ignore operation if we don't have data yet.
 				if qdb == nil {
-					atomic.AddInt64(&igCount, 1)
 					return
 				}
 
@@ -130,25 +113,17 @@ func testSimulate(t *testing.T, openOption *bolt.Options, round, threadCount, pa
 			}(writable, handler)
 
 			i++
-			if i >= threadCount {
+			if i > threadCount {
 				break
 			}
 		}
 
 		// Wait until all threads are done.
 		wg.Wait()
-		t.Logf("transactions:%d ignored:%d", opCount, igCount)
-		close(errCh)
-		for err := range errCh {
-			if err != nil {
-				t.Fatalf("error from inside goroutine: %v", err)
-			}
-		}
 
 		db.MustClose()
 		db.MustReopen()
 	}
-
 }
 
 type simulateHandler func(tx *bolt.Tx, qdb *QuickDB)

@@ -1,5 +1,5 @@
-hash: 81dd352c8ce41a6551015da06a549f925615638b97529e06c3e05ced31eb1a7e
-updated: 2019-12-10T20:44:06.792641+08:00
+hash: b8a65716730645aff6fa78fff479cdf420148e4d7d16c072a7de8ab0a9554ad8
+updated: 2019-12-10T21:52:42.391991+08:00
 imports:
 - name: bazil.org/fuse
   version: 65cc252bf6691cb3c7014bcb2c8dc29de91e3a7e
@@ -107,7 +107,7 @@ imports:
   - dropbox/users
   - dropbox/users_common
 - name: github.com/etcd-io/bbolt
-  version: 0b7b41e21b577d071c01faa158718609d1cbe4c9
+  version: a0458a2b35708eef59eb5f620ceb3cd1c01a824d
 - name: github.com/golang/groupcache
   version: 611e8accdfc92c4187d399e95ce826046d4c8d73
   subpackages:
