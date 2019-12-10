@@ -134,7 +134,7 @@ func main() {
 		log.Fatalf("%s: %s\n", "unexpected positional arguments", flag.Args())
 	}
 
-	config.Path = *path
+	config.Path, _ = filepath.Abs(*path)
 	config.IfName = *ifName
 	config.Http = *http
 	config.FriendlyName = *friendlyName
@@ -143,9 +143,9 @@ func main() {
 	config.FFprobeCachePath = *fFprobeCachePath
 	config.AllowedIpNets = makeIpNets(*allowedIps)
 	config.ForceTranscodeTo = *forceTranscodeTo
-	// if len(config.AllowedIps) > 0 {
+
 	log.Printf("allowed ip nets are %q", config.AllowedIpNets)
-	// }
+	log.Printf("serving folder %q", config.Path)
 
 	if len(*configFilePath) > 0 {
 		config.load(*configFilePath)

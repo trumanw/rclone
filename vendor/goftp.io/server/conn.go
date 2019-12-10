@@ -1,3 +1,7 @@
+// Copyright 2018 The goftp Authors. All rights reserved.
+// Use of this source code is governed by a MIT-style
+// license that can be found in the LICENSE file.
+
 package server
 
 import (
@@ -9,12 +13,11 @@ import (
 	"fmt"
 	"io"
 	"log"
+	mrand "math/rand"
 	"net"
 	"path/filepath"
 	"strconv"
 	"strings"
-
-	mrand "math/rand"
 )
 
 const (
@@ -55,10 +58,18 @@ func (conn *Conn) PublicIp() string {
 }
 
 func (conn *Conn) passiveListenIP() string {
+	var listenIP string
 	if len(conn.PublicIp()) > 0 {
-		return conn.PublicIp()
+		listenIP = conn.PublicIp()
+	} else {
+		listenIP = conn.conn.LocalAddr().(*net.TCPAddr).IP.String()
 	}
-	return conn.conn.LocalAddr().String()
+
+	lastIdx := strings.LastIndex(listenIP, ":")
+	if lastIdx <= 0 {
+		return listenIP
+	}
+	return listenIP[:lastIdx]
 }
 
 func (conn *Conn) PassivePort() int {
@@ -105,7 +116,7 @@ func (conn *Conn) Serve() {
 		line, err := conn.controlReader.ReadString('\n')
 		if err != nil {
 			if err != io.EOF {
-				conn.logger.Print(conn.sessionID, fmt.Sprintln("read error:", err))
+				conn.logger.Print(conn.sessionID, fmt.Sprint("read error:", err))
 			}
 
 			break
@@ -180,6 +191,15 @@ func (conn *Conn) writeMessage(code int, message string) (wrote int, err error) 
 	return
 }
 
+// writeMessage will send a standard FTP response back to the client.
+func (conn *Conn) writeMessageMultiline(code int, message string) (wrote int, err error) {
+	conn.logger.PrintResponse(conn.sessionID, code, message)
+	line := fmt.Sprintf("%d-%s\r\n%d END\r\n", code, message, code)
+	wrote, err = conn.controlWriter.WriteString(line)
+	conn.controlWriter.Flush()
+	return
+}
+
 // buildPath takes a client supplied path or filename and generates a safe
 // absolute path within their account sandbox.
 //
@@ -190,7 +210,7 @@ func (conn *Conn) writeMessage(code int, message string) (wrote int, err error) 
 //    buildpath("/files/two.txt")
 //    => "/files/two.txt"
 //    buildpath("files/two.txt")
-//    => "files/two.txt"
+//    => "/files/two.txt"
 //    buildpath("/../../../../etc/passwd")
 //    => "/etc/passwd"
 //

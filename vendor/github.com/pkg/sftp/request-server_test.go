@@ -241,9 +241,20 @@ func TestRequestRename(t *testing.T) {
 	err = p.cli.Rename("/foo", "/bar")
 	assert.Nil(t, err)
 	f, err := r.fetch("/bar")
+	if err != nil {
+		t.Fatal("unexpected error:", err)
+	}
 	assert.Equal(t, "bar", f.Name())
-	assert.Nil(t, err)
 	_, err = r.fetch("/foo")
+	assert.Equal(t, os.ErrNotExist, err)
+	err = p.cli.PosixRename("/bar", "/baz")
+	assert.Nil(t, err)
+	f, err = r.fetch("/baz")
+	if err != nil {
+		t.Fatal("unexpected error:", err)
+	}
+	assert.Equal(t, "baz", f.Name())
+	_, err = r.fetch("/bar")
 	assert.Equal(t, os.ErrNotExist, err)
 }
 
@@ -313,6 +324,27 @@ func TestRequestStatFail(t *testing.T) {
 	assert.True(t, os.IsNotExist(err))
 }
 
+func TestRequestLink(t *testing.T) {
+	p := clientRequestServerPair(t)
+	defer p.Close()
+	_, err := putTestFile(p.cli, "/foo", "hello")
+	assert.Nil(t, err)
+	err = p.cli.Link("/foo", "/bar")
+	assert.Nil(t, err)
+	r := p.testHandler()
+	fi, err := r.fetch("/bar")
+	assert.Nil(t, err)
+	assert.True(t, int(fi.Size()) == len("hello"))
+}
+
+func TestRequestLinkFail(t *testing.T) {
+	p := clientRequestServerPair(t)
+	defer p.Close()
+	err := p.cli.Link("/foo", "/bar")
+	t.Log(err)
+	assert.True(t, os.IsNotExist(err))
+}
+
 func TestRequestSymlink(t *testing.T) {
 	p := clientRequestServerPair(t)
 	defer p.Close()
@@ -357,7 +389,7 @@ func TestRequestReaddir(t *testing.T) {
 		}
 	}
 	_, err := p.cli.ReadDir("/foo_01")
-	assert.Equal(t, &StatusError{Code: ssh_FX_FAILURE,
+	assert.Equal(t, &StatusError{Code: sshFxFailure,
 		msg: " /foo_01: not a directory"}, err)
 	_, err = p.cli.ReadDir("/does_not_exist")
 	assert.Equal(t, os.ErrNotExist, err)

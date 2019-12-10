@@ -412,21 +412,6 @@
     },
     {
       "kind": "discovery#directoryItem",
-      "id": "apigee:v1",
-      "name": "apigee",
-      "version": "v1",
-      "title": "Apigee API",
-      "description": "The Apigee API lets you programmatically manage Apigee Hybrid with a set of RESTful operations, including: - Create, edit, and delete API proxies - Manage users - Deploy and undeploy proxy revisions - Configure environments For information on using the APIs described in this section, see Get started using the APIs \u003c/hybrid/beta2/reference/apis\u003e.",
-      "discoveryRestUrl": "https://apigee.googleapis.com/$discovery/rest?version=v1",
-      "icons": {
-        "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
-        "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
-      },
-      "documentationLink": "https://cloud.google.com/apigee-api-management/",
-      "preferred": true
-    },
-    {
-      "kind": "discovery#directoryItem",
       "id": "appengine:v1alpha",
       "name": "appengine",
       "version": "v1alpha",
@@ -639,6 +624,21 @@
     },
     {
       "kind": "discovery#directoryItem",
+      "id": "billingbudgets:v1beta1",
+      "name": "billingbudgets",
+      "version": "v1beta1",
+      "title": "Cloud Billing Budget API",
+      "description": "The Cloud Billing Budget API stores Cloud Billing budgets, which define a budget plan and the rules to execute as spend is tracked against that plan.",
+      "discoveryRestUrl": "https://billingbudgets.googleapis.com/$discovery/rest?version=v1beta1",
+      "icons": {
+        "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
+        "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
+      },
+      "documentationLink": "https://cloud.google.com/billing/docs/how-to/budget-api-overview",
+      "preferred": true
+    },
+    {
+      "kind": "discovery#directoryItem",
       "id": "binaryauthorization:v1",
       "name": "binaryauthorization",
       "version": "v1",
@@ -827,21 +827,6 @@
       },
       "documentationLink": "https://cloud.google.com/billing/",
       "preferred": true
-    },
-    {
-      "kind": "discovery#directoryItem",
-      "id": "cloudbuild:v1alpha1",
-      "name": "cloudbuild",
-      "version": "v1alpha1",
-      "title": "Cloud Build API",
-      "description": "Creates and manages builds on Google Cloud Platform.",
-      "discoveryRestUrl": "https://cloudbuild.googleapis.com/$discovery/rest?version=v1alpha1",
-      "icons": {
-        "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
-        "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
-      },
-      "documentationLink": "https://cloud.google.com/cloud-build/docs/",
-      "preferred": false
     },
     {
       "kind": "discovery#directoryItem",
@@ -1220,21 +1205,6 @@
     },
     {
       "kind": "discovery#directoryItem",
-      "id": "cloudtrace:v2alpha1",
-      "name": "cloudtrace",
-      "version": "v2alpha1",
-      "title": "Stackdriver Trace API",
-      "description": "Sends application trace data to Stackdriver Trace for viewing. Trace data is collected for all App Engine applications by default. Trace data from other applications can be provided using this API. This library is used to interact with the Trace API directly. If you are looking to instrument your application for Stackdriver Trace, we recommend using OpenCensus.",
-      "discoveryRestUrl": "https://cloudtrace.googleapis.com/$discovery/rest?version=v2alpha1",
-      "icons": {
-        "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
-        "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
-      },
-      "documentationLink": "https://cloud.google.com/trace",
-      "preferred": false
-    },
-    {
-      "kind": "discovery#directoryItem",
       "id": "cloudtrace:v1",
       "name": "cloudtrace",
       "version": "v1",
@@ -1466,6 +1436,21 @@
     },
     {
       "kind": "discovery#directoryItem",
+      "id": "datacatalog:v1beta1",
+      "name": "datacatalog",
+      "version": "v1beta1",
+      "title": "Google Cloud Data Catalog API",
+      "description": "A fully managed and highly scalable data discovery and metadata management service.",
+      "discoveryRestUrl": "https://datacatalog.googleapis.com/$discovery/rest?version=v1beta1",
+      "icons": {
+        "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
+        "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
+      },
+      "documentationLink": "https://cloud.google.com/data-catalog/docs/",
+      "preferred": true
+    },
+    {
+      "kind": "discovery#directoryItem",
       "id": "dataflow:v1b3",
       "name": "dataflow",
       "version": "v1b3",
@@ -1626,6 +1611,22 @@
       "description": "Manages your DoubleClick Campaign Manager ad campaigns and reports.",
       "discoveryRestUrl": "https://www.googleapis.com/discovery/v1/apis/dfareporting/v3.3/rest",
       "discoveryLink": "./apis/dfareporting/v3.3/rest",
+      "icons": {
+        "x16": "https://www.google.com/images/icons/product/doubleclick-16.gif",
+        "x32": "https://www.google.com/images/icons/product/doubleclick-32.gif"
+      },
+      "documentationLink": "https://developers.google.com/doubleclick-advertisers/",
+      "preferred": false
+    },
+    {
+      "kind": "discovery#directoryItem",
+      "id": "dfareporting:v3.4",
+      "name": "dfareporting",
+      "version": "v3.4",
+      "title": "DCM/DFA Reporting And Trafficking API",
+      "description": "Manages your DoubleClick Campaign Manager ad campaigns and reports.",
+      "discoveryRestUrl": "https://www.googleapis.com/discovery/v1/apis/dfareporting/v3.4/rest",
+      "discoveryLink": "./apis/dfareporting/v3.4/rest",
       "icons": {
         "x16": "https://www.google.com/images/icons/product/doubleclick-16.gif",
         "x32": "https://www.google.com/images/icons/product/doubleclick-32.gif"
@@ -1796,6 +1797,25 @@
       "description": "API for viewing and managing your reports in DoubleClick Bid Manager.",
       "discoveryRestUrl": "https://www.googleapis.com/discovery/v1/apis/doubleclickbidmanager/v1/rest",
       "discoveryLink": "./apis/doubleclickbidmanager/v1/rest",
+      "icons": {
+        "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
+        "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
+      },
+      "documentationLink": "https://developers.google.com/bid-manager/",
+      "labels": [
+        "limited_availability"
+      ],
+      "preferred": false
+    },
+    {
+      "kind": "discovery#directoryItem",
+      "id": "doubleclickbidmanager:v1.1",
+      "name": "doubleclickbidmanager",
+      "version": "v1.1",
+      "title": "DoubleClick Bid Manager API",
+      "description": "API for viewing and managing your reports in DoubleClick Bid Manager.",
+      "discoveryRestUrl": "https://www.googleapis.com/discovery/v1/apis/doubleclickbidmanager/v1.1/rest",
+      "discoveryLink": "./apis/doubleclickbidmanager/v1.1/rest",
       "icons": {
         "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
         "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -3541,25 +3561,6 @@
         "labs"
       ],
       "preferred": true
-    },
-    {
-      "kind": "discovery#directoryItem",
-      "id": "storage:v1beta1",
-      "name": "storage",
-      "version": "v1beta1",
-      "title": "Cloud Storage JSON API",
-      "description": "Lets you store and retrieve potentially-large, immutable data objects.",
-      "discoveryRestUrl": "https://www.googleapis.com/discovery/v1/apis/storage/v1beta1/rest",
-      "discoveryLink": "./apis/storage/v1beta1/rest",
-      "icons": {
-        "x16": "https://www.google.com/images/icons/product/cloud_storage-16.png",
-        "x32": "https://www.google.com/images/icons/product/cloud_storage-32.png"
-      },
-      "documentationLink": "https://developers.google.com/storage/docs/json_api/",
-      "labels": [
-        "labs"
-      ],
-      "preferred": false
     },
     {
       "kind": "discovery#directoryItem",

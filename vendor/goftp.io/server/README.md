@@ -1,48 +1,56 @@
 # server
 
+[![Build Status](https://drone.gitea.com/api/badges/goftp/server/status.svg)](https://drone.gitea.com/goftp/server) [![](http://gocover.io/_badge/gitea.com/goftp/server)](http://gocover.io/gitea.com/goftp/server)
+[![](https://goreportcard.com/badge/gitea.com/goftp/server)](https://goreportcard.com/report/gitea.com/goftp/server)
+
 A FTP server framework forked from [github.com/yob/graval](http://github.com/yob/graval) and changed a lot.
 
-Full documentation for the package is available on [godoc](http://godoc.org/github.com/goftp/server)
+Full documentation for the package is available on [godoc](http://godoc.org/goftp.io/server)
 
 ## Version
 
-    v0.2.1104
+    v0.2.3
 
 ## Installation
 
-    go get github.com/goftp/server
+    go get goftp.io/server
 
 ## Usage
 
-To boot an FTP server you will need to provide a driver that speaks to your
-persistence layer - the required driver contract is listed below.
+To boot a FTP server you will need to provide a driver that speaks to
+your persistence layer - the required driver contract is in [the
+documentation](http://godoc.org/goftp.io/server).
 
-There is a sample in-memory driver available as a demo. You can build it with
-this command:
+Look at the [file driver](https://gitea.com/goftp/file-driver) to see
+an example of how to build a backend.
 
-    go install github.com/goftp/ftpd
+There is a [sample ftp server](/exampleftpd) as a demo. You can build it with this
+command:
 
-Then run it:
+    go install goftp.io/server/exampleftpd
 
-    ./bin/ftpd
+Then run it if you have add $GOPATH to your $PATH:
+
+    exampleftpd -root /tmp
 
 And finally, connect to the server with any FTP client and the following
 details:
 
     host: 127.0.0.1
     port: 2121
-    username: test
-    password: 1234
+    username: admin
+    password: 123456
+
+This uses the file driver mentioned above to serve files.
 
 ## Contributors
 
-* Lunny Xiao <xiaolunwen@gmail.com>
-* James Healy <james@yob.id.au> [http://www.yob.id.au](http://www.yob.id.au)
+see [https://gitea.com/goftp/server/graphs/contributors](https://gitea.com/goftp/server/graphs/contributors)
 
 ## Warning
 
 FTP is an incredibly insecure protocol. Be careful about forcing users to authenticate
-with a username or password that are important.
+with an username or password that are important.
 
 ## License
 

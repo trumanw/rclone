@@ -71,8 +71,8 @@ var sftpServerDebugStream = ioutil.Discard
 var sftpClientDebugStream = ioutil.Discard
 
 const (
-	GOLANG_SFTP  = true
-	OPENSSH_SFTP = false
+	GolangSFTP  = true
+	OpenSSHSFTP = false
 )
 
 var (
@@ -468,8 +468,8 @@ func runSftpClient(t *testing.T, script string, path string, host string, port i
 }
 
 func TestServerCompareSubsystems(t *testing.T) {
-	listenerGo, hostGo, portGo := testServer(t, GOLANG_SFTP, READONLY)
-	listenerOp, hostOp, portOp := testServer(t, OPENSSH_SFTP, READONLY)
+	listenerGo, hostGo, portGo := testServer(t, GolangSFTP, READONLY)
+	listenerOp, hostOp, portOp := testServer(t, OpenSSHSFTP, READONLY)
 	defer listenerGo.Close()
 	defer listenerOp.Close()
 
@@ -543,7 +543,7 @@ func randName() string {
 }
 
 func TestServerMkdirRmdir(t *testing.T) {
-	listenerGo, hostGo, portGo := testServer(t, GOLANG_SFTP, READONLY)
+	listenerGo, hostGo, portGo := testServer(t, GolangSFTP, READONLY)
 	defer listenerGo.Close()
 
 	tmpDir := "/tmp/" + randName()
@@ -569,9 +569,38 @@ func TestServerMkdirRmdir(t *testing.T) {
 	}
 }
 
+func TestServerLink(t *testing.T) {
+	skipIfWindows(t) // No hard links on windows.
+	listenerGo, hostGo, portGo := testServer(t, GolangSFTP, READONLY)
+	defer listenerGo.Close()
+
+	tmpFileLocalData := randData(999)
+
+	linkdest := "/tmp/" + randName()
+	defer os.RemoveAll(linkdest)
+	if err := ioutil.WriteFile(linkdest, tmpFileLocalData, 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	link := "/tmp/" + randName()
+	defer os.RemoveAll(link)
+
+	// now create a hard link within the new directory
+	if output, err := runSftpClient(t, fmt.Sprintf("ln %s %s", linkdest, link), "/", hostGo, portGo); err != nil {
+		t.Fatalf("failed: %v %v", err, string(output))
+	}
+
+	// file should now exist and be the same size as linkdest
+	if stat, err := os.Lstat(link); err != nil {
+		t.Fatal(err)
+	} else if int(stat.Size()) != len(tmpFileLocalData) {
+		t.Fatalf("wrong size: %v", len(tmpFileLocalData))
+	}
+}
+
 func TestServerSymlink(t *testing.T) {
 	skipIfWindows(t) // No symlinks on windows.
-	listenerGo, hostGo, portGo := testServer(t, GOLANG_SFTP, READONLY)
+	listenerGo, hostGo, portGo := testServer(t, GolangSFTP, READONLY)
 	defer listenerGo.Close()
 
 	link := "/tmp/" + randName()
@@ -591,7 +620,7 @@ func TestServerSymlink(t *testing.T) {
 }
 
 func TestServerPut(t *testing.T) {
-	listenerGo, hostGo, portGo := testServer(t, GOLANG_SFTP, READONLY)
+	listenerGo, hostGo, portGo := testServer(t, GolangSFTP, READONLY)
 	defer listenerGo.Close()
 
 	tmpFileLocal := "/tmp/" + randName()
@@ -621,7 +650,7 @@ func TestServerPut(t *testing.T) {
 }
 
 func TestServerGet(t *testing.T) {
-	listenerGo, hostGo, portGo := testServer(t, GOLANG_SFTP, READONLY)
+	listenerGo, hostGo, portGo := testServer(t, GolangSFTP, READONLY)
 	defer listenerGo.Close()
 
 	tmpFileLocal := "/tmp/" + randName()
@@ -717,7 +746,7 @@ func compareDirectoriesRecursive(t *testing.T, aroot, broot string) {
 }
 
 func TestServerPutRecursive(t *testing.T) {
-	listenerGo, hostGo, portGo := testServer(t, GOLANG_SFTP, READONLY)
+	listenerGo, hostGo, portGo := testServer(t, GolangSFTP, READONLY)
 	defer listenerGo.Close()
 
 	dirLocal, err := os.Getwd()
@@ -738,7 +767,7 @@ func TestServerPutRecursive(t *testing.T) {
 }
 
 func TestServerGetRecursive(t *testing.T) {
-	listenerGo, hostGo, portGo := testServer(t, GOLANG_SFTP, READONLY)
+	listenerGo, hostGo, portGo := testServer(t, GolangSFTP, READONLY)
 	defer listenerGo.Close()
 
 	dirRemote, err := os.Getwd()
