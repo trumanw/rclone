@@ -28,7 +28,6 @@ import (
 	_ "github.com/trumanw/rclone/backend/pcloud"
 	_ "github.com/trumanw/rclone/backend/premiumizeme"
 	_ "github.com/trumanw/rclone/backend/putio"
-	_ "github.com/trumanw/rclone/backend/qingstor"
 	_ "github.com/trumanw/rclone/backend/s3"
 	_ "github.com/trumanw/rclone/backend/sftp"
 	_ "github.com/trumanw/rclone/backend/sharefile"

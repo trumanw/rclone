@@ -32,7 +32,6 @@ const (
 	Pcloud             = Base
 	PremiumizeMe       = Base
 	Putio              = Base
-	QingStor           = Base
 	S3                 = Base
 	Sharefile          = Base
 	Swift              = Base
