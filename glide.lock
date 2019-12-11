@@ -1,5 +1,5 @@
 hash: b8a65716730645aff6fa78fff479cdf420148e4d7d16c072a7de8ab0a9554ad8
-updated: 2019-12-10T21:52:42.391991+08:00
+updated: 2019-12-11T10:16:25.457144767+08:00
 imports:
 - name: bazil.org/fuse
   version: 65cc252bf6691cb3c7014bcb2c8dc29de91e3a7e
@@ -7,7 +7,7 @@ imports:
   - fs
   - fuseutil
 - name: cloud.google.com/go
-  version: 0a414e0b1324f270b6a646b3ef9cefececd5f1b4
+  version: 5d956544dd2c8ce6615cd65d111e514cf2555754
   subpackages:
   - compute/metadata
 - name: github.com/a8m/tree
@@ -25,7 +25,7 @@ imports:
 - name: github.com/atotto/clipboard
   version: 579379fa8ff8a6d3fa979cec107f8f6d7f8fde90
 - name: github.com/aws/aws-sdk-go
-  version: b2f50efc3c838831d3d2396a9505be7c22247c68
+  version: 8c382ec852056ae4cc1ef9a33e608f2ee5388288
   subpackages:
   - aws
   - aws/arn
@@ -175,7 +175,7 @@ imports:
   subpackages:
   - difflib
 - name: github.com/putdotio/go-putio
-  version: 19b9c636c877741bdbc4a461dea101d871b09b3c
+  version: 9be1143756a8d3aecefdec6bf7d4f356600225b0
   subpackages:
   - putio
 - name: github.com/rfjakob/eme
@@ -197,7 +197,7 @@ imports:
 - name: github.com/spf13/pflag
   version: 2e9d26c8c37aae03e3f9d4e90b7116f5accb7cab
 - name: github.com/stretchr/testify
-  version: 59bec1f2ff4b2b9736cb60cd7429d1bc55ace874
+  version: 9a14481b90a0b2146f04fefbabb26dfad48af64c
   subpackages:
   - assert
   - require
@@ -299,7 +299,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: 43d0d5a58be4c51f935550a70d2c663536bdf36b
+  version: bc749f7e8b8066a489fc96f4171de2da9aef03c1
   subpackages:
   - drive/v2
   - drive/v3
@@ -329,7 +329,7 @@ imports:
   subpackages:
   - googleapis/rpc/status
 - name: google.golang.org/grpc
-  version: 86c8a0cb87c78383ee062a935ccb178130d56213
+  version: 505c0d6440ba0123bc0e443ce293372bcf49359f
   subpackages:
   - attributes
   - backoff
