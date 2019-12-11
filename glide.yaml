@@ -79,6 +79,7 @@ import:
   - doc
 - package: github.com/spf13/pflag
 - package: github.com/stretchr/testify
+  version: 9a14481b90a0b2146f04fefbabb26dfad48af64c
   subpackages:
   - assert
   - require

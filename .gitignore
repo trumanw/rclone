@@ -8,3 +8,9 @@ rclone.iml
 .history
 *.test
 *.log
+
+# Ignore the generated files from Glide
+build/
+
+# VSCode
+.vscode/
