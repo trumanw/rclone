@@ -4,6 +4,7 @@ package march
 import (
 	"context"
 	"path"
+	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
@@ -30,6 +31,7 @@ type March struct {
 	SrcIncludeAll bool            // don't include all files in the src
 	DstIncludeAll bool            // don't include all files in the destination
 	Callback      Marcher         // object to call with results
+	SyncOnlyFn    string          // sync only file name
 	// internal state
 	srcListDir listDirFn // function to call to list a directory in the src
 	dstListDir listDirFn // function to call to list a directory in the dst
@@ -424,7 +426,16 @@ func (m *March) processJob(job listDirJob) ([]listDirJob, error) {
 		if m.aborting() {
 			return nil, m.Ctx.Err()
 		}
-		recurse := m.Callback.SrcOnly(src)
+		// recurse := m.Callback.SrcOnly(src)
+		recurse := true
+		// filter out specific files with filename
+		if filepath.Base(src.String()) == m.SyncOnlyFn && m.SyncOnlyFn != "" {
+			recurse = m.Callback.SrcOnly(src)
+		}
+		if m.SyncOnlyFn == "" {
+			recurse = m.Callback.SrcOnly(src)
+		}
+
 		if recurse && job.srcDepth > 0 {
 			jobs = append(jobs, listDirJob{
 				srcRemote: src.Remote(),

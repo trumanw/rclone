@@ -64,6 +64,7 @@ type syncCopyMove struct {
 	compareCopyDest fs.Fs                  // place to check for files to server side copy
 	backupDir       fs.Fs                  // place to store overwrites/deletes
 	ignorer         *ignore.GitIgnore      // .rcignore file matcher
+	syncOnlyFn      string                 // sync only specific file name
 }
 
 func newSyncCopyMove(ctx context.Context, fdst, fsrc fs.Fs, deleteMode fs.DeleteMode, DoMove bool, deleteEmptySrcDirs bool, copyEmptySrcDirs bool) (*syncCopyMove, error) {
@@ -92,6 +93,12 @@ func newSyncCopyMove(ctx context.Context, fdst, fsrc fs.Fs, deleteMode fs.Delete
 		toBeRenamed:        newPipe(accounting.Stats(ctx).SetRenameQueue, fs.Config.MaxBacklog),
 		trackRenamesCh:     make(chan fs.Object, fs.Config.Checkers),
 		ignorer:            nil,
+		syncOnlyFn:         "",
+	}
+	// Extract SyncOnlyFn from context
+	syncOnlyFn := fmt.Sprintf("%v", ctx.Value("SyncOnlyFn"))
+	if syncOnlyFn != "" {
+		s.syncOnlyFn = syncOnlyFn
 	}
 	s.ctx, s.cancel = context.WithCancel(ctx)
 	if s.noTraverse && s.deleteMode != fs.DeleteModeOff {
@@ -680,6 +687,7 @@ func (s *syncCopyMove) run() error {
 		Dir:           s.dir,
 		NoTraverse:    s.noTraverse,
 		Callback:      s,
+		SyncOnlyFn:    s.syncOnlyFn,
 		DstIncludeAll: filter.Active.Opt.DeleteExcluded,
 	}
 	s.processError(m.Run())
