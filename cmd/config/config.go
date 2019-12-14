@@ -8,12 +8,12 @@ import (
 	"sort"
 
 	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
 	"github.com/trumanw/rclone/cmd"
 	"github.com/trumanw/rclone/fs"
 	"github.com/trumanw/rclone/fs/config"
 	"github.com/trumanw/rclone/fs/config/flags"
 	"github.com/trumanw/rclone/fs/rc"
-	"github.com/spf13/cobra"
 )
 
 func init() {
