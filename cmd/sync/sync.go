@@ -13,6 +13,7 @@ import (
 var (
 	createEmptySrcDirs = false
 	ignoreFile         string
+	syncOnlyFn         string
 )
 
 func init() {
@@ -20,6 +21,7 @@ func init() {
 	cmdFlags := commandDefinition.Flags()
 	flags.BoolVarP(cmdFlags, &createEmptySrcDirs, "create-empty-src-dirs", "", createEmptySrcDirs, "Create empty source dirs on destination after sync")
 	flags.StringVarP(cmdFlags, &ignoreFile, "ignore-file", "", "", "Specify the ignore file path as the filtering rules.")
+	flags.StringVarP(cmdFlags, &syncOnlyFn, "sync-only-fn", "", "", "Specify the sync-only file name.")
 }
 
 var commandDefinition = &cobra.Command{
@@ -50,6 +52,7 @@ go there.
 	Run: func(command *cobra.Command, args []string) {
 		cmd.CheckArgs(2, 2, command, args)
 		c := context.WithValue(context.Background(), "IgnoreFile", ignoreFile)
+		c = context.WithValue(c, "SyncOnlyFn", syncOnlyFn)
 		fsrc, srcFileName, fdst := cmd.NewFsSrcFileDst(args)
 		cmd.Run(true, true, command, func() error {
 			if srcFileName == "" {
