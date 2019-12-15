@@ -911,6 +911,22 @@ func runSyncCopyMove(ctx context.Context, fdst, fsrc fs.Fs, deleteMode fs.Delete
 	return do.run()
 }
 
+// BatchSync multiple fsrc into fdst
+func BatchSync(ctx context.Context, fdsts, fsrcs []fs.Fs, copyEmptySrcDirs bool) error {
+	if len(fdsts) != len(fsrcs) {
+		return fserrors.FatalError(errors.New("can't sync the list of dst and src with different length"))
+	}
+
+	for idx, fdst := range fdsts {
+		fsrc := fsrcs[idx]
+		err := runSyncCopyMove(ctx, fdst, fsrc, fs.Config.DeleteMode, false, false, copyEmptySrcDirs)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // Sync fsrc into fdst
 func Sync(ctx context.Context, fdst, fsrc fs.Fs, copyEmptySrcDirs bool) error {
 	return runSyncCopyMove(ctx, fdst, fsrc, fs.Config.DeleteMode, false, false, copyEmptySrcDirs)
