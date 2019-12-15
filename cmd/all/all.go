@@ -6,6 +6,7 @@ import (
 	_ "github.com/trumanw/rclone/cmd"
 	_ "github.com/trumanw/rclone/cmd/about"
 	_ "github.com/trumanw/rclone/cmd/authorize"
+	_ "github.com/trumanw/rclone/cmd/bsync"
 	_ "github.com/trumanw/rclone/cmd/cachestats"
 	_ "github.com/trumanw/rclone/cmd/cat"
 	_ "github.com/trumanw/rclone/cmd/check"
