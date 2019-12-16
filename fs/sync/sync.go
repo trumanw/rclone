@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"path/filepath"
 	"sort"
 	"sync"
 
@@ -687,7 +688,6 @@ func (s *syncCopyMove) run() error {
 		Dir:           s.dir,
 		NoTraverse:    s.noTraverse,
 		Callback:      s,
-		SyncOnlyFn:    s.syncOnlyFn,
 		DstIncludeAll: filter.Active.Opt.DeleteExcluded,
 	}
 	s.processError(m.Run())
@@ -790,6 +790,11 @@ func (s *syncCopyMove) SrcOnly(src fs.DirEntry) (recurse bool) {
 	}
 	switch x := src.(type) {
 	case fs.Object:
+		// filter out the file whcih is not syncOnlyFn
+		if filepath.Base(src.String()) != s.syncOnlyFn && s.syncOnlyFn != "" {
+			return false
+		}
+
 		// If it's a copy operation,
 		// remove parent directory from srcEmptyDirs
 		// since it's not really empty
