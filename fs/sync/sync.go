@@ -917,19 +917,28 @@ func runSyncCopyMove(ctx context.Context, fdst, fsrc fs.Fs, deleteMode fs.Delete
 }
 
 // BatchSync multiple fsrc into fdst
-func BatchSync(ctx context.Context, fdsts, fsrcs []fs.Fs, copyEmptySrcDirs bool) error {
-	if len(fdsts) != len(fsrcs) {
-		return fserrors.FatalError(errors.New("can't sync the list of dst and src with different length"))
+func BatchSync(ctx context.Context, fdsts, fsrcs []fs.Fs, copyEmptySrcDirs bool) ([]string, error) {
+	if len(fdsts) < 1 {
+		return nil, fserrors.FatalError(errors.New("can't sync the empty list of dst and src"))
 	}
 
+	if len(fdsts) != len(fsrcs) {
+		return nil, fserrors.FatalError(errors.New("can't sync the list of dst and src with different length"))
+	}
+
+	errs := make([]string, len(fdsts))
 	for idx, fdst := range fdsts {
 		fsrc := fsrcs[idx]
-		err := runSyncCopyMove(ctx, fdst, fsrc, fs.Config.DeleteMode, false, false, copyEmptySrcDirs)
+		// err := runSyncCopyMove(ctx, fdst, fsrc, fs.Config.DeleteMode, false, false, copyEmptySrcDirs)
+		err := runSyncCopyMove(ctx, fdst, fsrc, fs.DeleteModeOff, false, false, copyEmptySrcDirs)
 		if err != nil {
-			return err
+			errs = append(errs, fsrc.String())
+		} else {
+			errs = append(errs, "")
 		}
 	}
-	return nil
+
+	return errs, nil
 }
 
 // Sync fsrc into fdst
