@@ -3,6 +3,7 @@ package bsync
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -68,7 +69,18 @@ var commandDefinition = &cobra.Command{
 		cmd.Run(true, true, command, func() error {
 			// errfs, err := sync.BatchSync(c, fdsts, fsrcs, createEmptySrcDirs)
 			errfs, err := sync.BatchSync(c, fdsts, fsrcs, createEmptySrcDirs)
-			fmt.Println(errfs)
+			if err != nil {
+				f, errio := os.Create("./rlog.err")
+				if errio != nil {
+					return errio
+				}
+				defer f.Close()
+
+				for _, errf := range errfs {
+					s := fmt.Sprintf("%s\n", errf)
+					f.WriteString(s)
+				}
+			}
 			return err
 		})
 	},

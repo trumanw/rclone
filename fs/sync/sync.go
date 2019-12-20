@@ -926,19 +926,21 @@ func BatchSync(ctx context.Context, fdsts, fsrcs []fs.Fs, copyEmptySrcDirs bool)
 		return nil, fserrors.FatalError(errors.New("can't sync the list of dst and src with different length"))
 	}
 
-	errs := make([]string, len(fdsts))
+	errs := make([]string, 0)
 	for idx, fdst := range fdsts {
 		fsrc := fsrcs[idx]
 		// err := runSyncCopyMove(ctx, fdst, fsrc, fs.Config.DeleteMode, false, false, copyEmptySrcDirs)
 		err := runSyncCopyMove(ctx, fdst, fsrc, fs.DeleteModeOff, false, false, copyEmptySrcDirs)
 		if err != nil {
-			errs = append(errs, fsrc.String())
-		} else {
-			errs = append(errs, "")
+			errs = append(errs, fsrc.Root())
 		}
 	}
+	if len(errs) != 0 {
+		err := fserrors.FatalError(errors.New("file(s) failed to be tranferred"))
+		return errs, err
+	}
 
-	return errs, nil
+	return nil, nil
 }
 
 // Sync fsrc into fdst
