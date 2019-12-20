@@ -2,6 +2,8 @@ package bsync
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -53,7 +55,7 @@ var commandDefinition = &cobra.Command{
 	**Note**: Use the ` + "`-P`" + `/` + "`--progress`" + ` flag to view real-time transfer statistic
 `,
 	Run: func(command *cobra.Command, argss []string) {
-		cmd.CheckArgs(2, 2, command, argss)
+		cmd.CheckArgs(1, 10, command, argss)
 		c := context.WithValue(context.Background(), "IgnoreFile", ignoreFile)
 		c = context.WithValue(c, "SyncOnlyFn", syncOnlyFn)
 		fdsts := make([]fs.Fs, len(argss))
@@ -65,7 +67,21 @@ var commandDefinition = &cobra.Command{
 			fsrcs[idx] = fsrc
 		}
 		cmd.Run(true, true, command, func() error {
-			return sync.BatchSync(c, fdsts, fsrcs, createEmptySrcDirs)
+			// errfs, err := sync.BatchSync(c, fdsts, fsrcs, createEmptySrcDirs)
+			errfs, err := sync.BatchSync(c, fdsts, fsrcs, createEmptySrcDirs)
+			if err != nil {
+				f, errio := os.Create("./rlog.err")
+				if errio != nil {
+					return errio
+				}
+				defer f.Close()
+
+				for _, errf := range errfs {
+					s := fmt.Sprintf("%s\n", errf)
+					f.WriteString(s)
+				}
+			}
+			return err
 		})
 	},
 }
