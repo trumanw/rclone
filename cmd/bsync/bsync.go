@@ -6,10 +6,14 @@ import (
 	"os"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/trumanw/rclone/cmd"
 	"github.com/trumanw/rclone/fs"
 	"github.com/trumanw/rclone/fs/config/flags"
+	"github.com/trumanw/rclone/fs/filter"
+	"github.com/trumanw/rclone/fs/fserrors"
+	"github.com/trumanw/rclone/fs/operations"
 	"github.com/trumanw/rclone/fs/sync"
 )
 
@@ -58,30 +62,75 @@ var commandDefinition = &cobra.Command{
 		cmd.CheckArgs(1, 10, command, argss)
 		c := context.WithValue(context.Background(), "IgnoreFile", ignoreFile)
 		c = context.WithValue(c, "SyncOnlyFn", syncOnlyFn)
-		fdsts := make([]fs.Fs, len(argss))
-		fsrcs := make([]fs.Fs, len(argss))
-		for idx, args := range argss {
+		// arrays for BatchSync
+		fsrcDirs := []fs.Fs{}
+		fdstDirs := []fs.Fs{}
+		// arrays for BatchCopyFiles
+		fsrcFileBases := []fs.Fs{}
+		fdstFileBases := []fs.Fs{}
+		fsrcFileNames := []string{}
+		fdstFileNames := []string{}
+		for _, args := range argss {
 			fargs := strings.Split(args, "@")
-			fsrc, _, fdst := cmd.NewFsSrcFileDst(fargs)
-			fdsts[idx] = fdst
-			fsrcs[idx] = fsrc
+			// fsrc, _, fdst := cmd.NewFsSrcFileDst(fargs)
+			// clear filters
+			filter.Active.Clear()
+			filter.Active, _ = filter.NewFilter(nil)
+			fsrcBaseName, fsrcFileName, fdstBaseName, fdstFileName := cmd.NewFsSrcDstFiles(fargs)
+			if fsrcFileName == "" {
+				fsrcDirs = append(fsrcDirs, fsrcBaseName)
+				fdstDirs = append(fdstDirs, fdstBaseName)
+			} else {
+				fsrcFileBases = append(fsrcFileBases, fsrcBaseName)
+				fdstFileBases = append(fdstFileBases, fdstBaseName)
+				fsrcFileNames = append(fsrcFileNames, fsrcFileName)
+				fdstFileNames = append(fdstFileNames, fdstFileName)
+			}
 		}
 		cmd.Run(true, true, command, func() error {
-			// errfs, err := sync.BatchSync(c, fdsts, fsrcs, createEmptySrcDirs)
-			errfs, err := sync.BatchSync(c, fdsts, fsrcs, createEmptySrcDirs)
-			if err != nil {
-				f, errio := os.Create("./rlog.err")
-				if errio != nil {
-					return errio
-				}
-				defer f.Close()
+			var dirSyncErr, fileSyncErr error
+			if len(fsrcDirs) > 0 && len(fsrcDirs) == len(fdstDirs) {
+				errfs, dirSyncErr := sync.BatchSync(c, fdstDirs, fsrcDirs, createEmptySrcDirs)
+				if dirSyncErr != nil {
+					f, errio := os.Create("./rlog.err")
+					if errio != nil {
+						return errio
+					}
+					defer f.Close()
 
-				for _, errf := range errfs {
-					s := fmt.Sprintf("%s\n", errf)
-					f.WriteString(s)
+					for _, errf := range errfs {
+						s := fmt.Sprintf("Directory Sync Failture: %s\n", errf)
+						f.WriteString(s)
+					}
 				}
 			}
-			return err
+			if len(fsrcFileBases) > 0 && len(fsrcFileBases) == len(fdstFileNames) {
+				errfs, fileSyncErr := operations.BatchCopyFiles(c, fdstFileBases, fsrcFileBases, fdstFileNames, fsrcFileNames)
+				if fileSyncErr != nil {
+					f, errio := os.OpenFile("./rlog.err",
+						os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+					if errio != nil {
+						return errio
+					}
+					defer f.Close()
+
+					for _, errf := range errfs {
+						s := fmt.Sprintf("File Sync Failure: %s\n", errf)
+						f.WriteString(s)
+					}
+				}
+			}
+
+			if dirSyncErr != nil && fileSyncErr != nil {
+				return fserrors.FatalError(errors.New("Both dirs and files have been failed to be copied"))
+			}
+			if dirSyncErr != nil {
+				return dirSyncErr
+			}
+			if fileSyncErr != nil {
+				return fileSyncErr
+			}
+			return nil
 		})
 	},
 }

@@ -1784,6 +1784,32 @@ func MoveFile(ctx context.Context, fdst fs.Fs, fsrc fs.Fs, dstFileName string, s
 	return moveOrCopyFile(ctx, fdst, fsrc, dstFileName, srcFileName, false)
 }
 
+// BatchCopyFiles copies multiple files from the list of src to the list of dst
+func BatchCopyFiles(ctx context.Context, fdsts, fsrcs []fs.Fs, fdstFns, fsrcFns []string) ([]string, error) {
+	if len(fdsts) < 1 {
+		return nil, fserrors.FatalError(errors.New("can't copy the empty list of files"))
+	}
+
+	if len(fdsts) != len(fsrcs) {
+		return nil, fserrors.FatalError(errors.New("can't copy the files from srcs to dsts with different length"))
+	}
+
+	errs := make([]string, 0)
+	for idx, fdst := range fdsts {
+		fsrc := fsrcs[idx]
+		err := moveOrCopyFile(ctx, fdst, fsrc, fdstFns[idx], fsrcFns[idx], true)
+		if err != nil {
+			errs = append(errs, fsrc.Root())
+		}
+	}
+	if len(errs) != 0 {
+		err := fserrors.FatalError(errors.New("file(s) are failed to be copied."))
+		return errs, err
+	}
+
+	return nil, nil
+}
+
 // CopyFile moves a single file possibly to a new name
 func CopyFile(ctx context.Context, fdst fs.Fs, fsrc fs.Fs, dstFileName string, srcFileName string) (err error) {
 	return moveOrCopyFile(ctx, fdst, fsrc, dstFileName, srcFileName, true)
