@@ -3,11 +3,11 @@ package copy
 import (
 	"context"
 
+	"github.com/spf13/cobra"
 	"github.com/trumanw/rclone/cmd"
 	"github.com/trumanw/rclone/fs/config/flags"
 	"github.com/trumanw/rclone/fs/operations"
 	"github.com/trumanw/rclone/fs/sync"
-	"github.com/spf13/cobra"
 )
 
 var (
