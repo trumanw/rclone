@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"path/filepath"
 	"sort"
 	"sync"
 
@@ -687,7 +688,6 @@ func (s *syncCopyMove) run() error {
 		Dir:           s.dir,
 		NoTraverse:    s.noTraverse,
 		Callback:      s,
-		SyncOnlyFn:    s.syncOnlyFn,
 		DstIncludeAll: filter.Active.Opt.DeleteExcluded,
 	}
 	s.processError(m.Run())
@@ -790,6 +790,11 @@ func (s *syncCopyMove) SrcOnly(src fs.DirEntry) (recurse bool) {
 	}
 	switch x := src.(type) {
 	case fs.Object:
+		// filter out the file whcih is not syncOnlyFn
+		if filepath.Base(src.String()) != s.syncOnlyFn && s.syncOnlyFn != "" {
+			return false
+		}
+
 		// If it's a copy operation,
 		// remove parent directory from srcEmptyDirs
 		// since it's not really empty
@@ -912,19 +917,30 @@ func runSyncCopyMove(ctx context.Context, fdst, fsrc fs.Fs, deleteMode fs.Delete
 }
 
 // BatchSync multiple fsrc into fdst
-func BatchSync(ctx context.Context, fdsts, fsrcs []fs.Fs, copyEmptySrcDirs bool) error {
-	if len(fdsts) != len(fsrcs) {
-		return fserrors.FatalError(errors.New("can't sync the list of dst and src with different length"))
+func BatchSync(ctx context.Context, fdsts, fsrcs []fs.Fs, copyEmptySrcDirs bool) ([]string, error) {
+	if len(fdsts) < 1 {
+		return nil, fserrors.FatalError(errors.New("can't sync the empty list of dst and src"))
 	}
 
+	if len(fdsts) != len(fsrcs) {
+		return nil, fserrors.FatalError(errors.New("can't sync the list of dst and src with different length"))
+	}
+
+	errs := make([]string, 0)
 	for idx, fdst := range fdsts {
 		fsrc := fsrcs[idx]
-		err := runSyncCopyMove(ctx, fdst, fsrc, fs.Config.DeleteMode, false, false, copyEmptySrcDirs)
+		// err := runSyncCopyMove(ctx, fdst, fsrc, fs.Config.DeleteMode, false, false, copyEmptySrcDirs)
+		err := runSyncCopyMove(ctx, fdst, fsrc, fs.DeleteModeOff, false, false, copyEmptySrcDirs)
 		if err != nil {
-			return err
+			errs = append(errs, fsrc.Root())
 		}
 	}
-	return nil
+	if len(errs) != 0 {
+		err := fserrors.FatalError(errors.New("file(s) failed to be tranferred"))
+		return errs, err
+	}
+
+	return nil, nil
 }
 
 // Sync fsrc into fdst
