@@ -22,6 +22,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/trumanw/rclone/fs"
 	"github.com/trumanw/rclone/fs/accounting"
 	"github.com/trumanw/rclone/fs/cache"
@@ -35,8 +37,6 @@ import (
 	"github.com/trumanw/rclone/fs/rc/rcflags"
 	"github.com/trumanw/rclone/fs/rc/rcserver"
 	"github.com/trumanw/rclone/lib/atexit"
-	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
 // Globals
@@ -169,6 +169,40 @@ func NewFsSrcFileDst(args []string) (fsrc fs.Fs, srcFileName string, fdst fs.Fs)
 // If src is a file then srcFileName and dstFileName will be non-empty
 func NewFsSrcDstFiles(args []string) (fsrc fs.Fs, srcFileName string, fdst fs.Fs, dstFileName string) {
 	fsrc, srcFileName = newFsFileAddFilter(args[0])
+	// If copying a file...
+	dstRemote := args[1]
+	// If file exists then srcFileName != "", however if the file
+	// doesn't exist then we assume it is a directory...
+	if srcFileName != "" {
+		var err error
+		dstRemote, dstFileName, err = fspath.Split(dstRemote)
+		if err != nil {
+			log.Fatalf("Parsing %q failed: %v", args[1], err)
+		}
+		if dstRemote == "" {
+			dstRemote = "."
+		}
+		if dstFileName == "" {
+			log.Fatalf("%q is a directory", args[1])
+		}
+	}
+	fdst, err := cache.Get(dstRemote)
+	switch err {
+	case fs.ErrorIsFile:
+		_ = fs.CountError(err)
+		log.Fatalf("Source doesn't exist or is a directory and destination is a file")
+	case nil:
+	default:
+		_ = fs.CountError(err)
+		log.Fatalf("Failed to create file system for destination %q: %v", dstRemote, err)
+	}
+	return
+}
+
+// NewFsSrcDstFilesOrDirs creates a new src and dst from the arguments
+// if src is a file than srcFileName and dstFileName will be non-empty
+func NewFsSrcDstFilesOrDirs(args []string) (fsrc fs.Fs, srcFileName string, fdst fs.Fs, dstFileName string) {
+	fsrc, srcFileName = NewFsFile(args[0])
 	// If copying a file...
 	dstRemote := args[1]
 	// If file exists then srcFileName != "", however if the file
