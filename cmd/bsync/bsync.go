@@ -72,11 +72,10 @@ var commandDefinition = &cobra.Command{
 		fdstFileNames := []string{}
 		for _, args := range argss {
 			fargs := strings.Split(args, "@")
-			// fsrc, _, fdst := cmd.NewFsSrcFileDst(fargs)
 			// clear filters
 			filter.Active.Clear()
 			filter.Active, _ = filter.NewFilter(nil)
-			fsrcBaseName, fsrcFileName, fdstBaseName, fdstFileName := cmd.NewFsSrcDstFiles(fargs)
+			fsrcBaseName, fsrcFileName, fdstBaseName, fdstFileName := cmd.NewFsSrcDstFilesOrDirs(fargs)
 			if fsrcFileName == "" {
 				fsrcDirs = append(fsrcDirs, fsrcBaseName)
 				fdstDirs = append(fdstDirs, fdstBaseName)
