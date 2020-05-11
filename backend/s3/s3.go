@@ -2015,7 +2015,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	if err != nil {
 		return err
 	}
-	modTime := src.ModTime(ctx)
+	// modTime := src.ModTime(ctx)
 	size := src.Size()
 
 	multipart := size < 0 || size >= int64(o.fs.opt.UploadCutoff)
@@ -2047,7 +2047,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 
 	// Set the mtime in the meta data
 	metadata := map[string]*string{
-		metaMtime: aws.String(swift.TimeToFloatString(modTime)),
+		// metaMtime: aws.String(swift.TimeToFloatString(modTime)),
 	}
 
 	// read the md5sum if available for non multpart and if
