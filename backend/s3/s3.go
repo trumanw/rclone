@@ -1800,7 +1800,7 @@ func (f *Fs) Copy(ctx context.Context, src fs.Object, remote string) (fs.Object,
 	req := s3.CopyObjectInput{
 		MetadataDirective: aws.String(s3.MetadataDirectiveCopy),
 	}
-	err = f.copy(ctx, &req, dstBucket, dstPath, srcBucket, srcPath, srcObj.Size())
+	err := f.copy(ctx, &req, dstBucket, dstPath, srcBucket, srcPath, srcObj.Size())
 	if err != nil {
 		return nil, err
 	}
@@ -2087,8 +2087,8 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 		if o.fs.opt.StorageClass != "" {
 			req.StorageClass = &o.fs.opt.StorageClass
 		}
-		err = o.fs.pacer.CallNoRetry(func() (bool, error) {
-			_, err = uploader.UploadWithContext(ctx, &req)
+		err := o.fs.pacer.CallNoRetry(func() (bool, error) {
+			_, err := uploader.UploadWithContext(ctx, &req)
 			return o.fs.shouldRetry(err)
 		})
 		if err != nil {
@@ -2169,7 +2169,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 
 	// Read the metadata from the newly created object
 	o.meta = nil // wipe old metadata
-	err = o.readMetaData(ctx)
+	err := o.readMetaData(ctx)
 	return err
 }
 
