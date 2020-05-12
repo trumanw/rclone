@@ -1787,10 +1787,10 @@ func (f *Fs) copyMultipart(ctx context.Context, req *s3.CopyObjectInput, dstBuck
 // If it isn't possible then return fs.ErrorCantCopy
 func (f *Fs) Copy(ctx context.Context, src fs.Object, remote string) (fs.Object, error) {
 	dstBucket, dstPath := f.split(remote)
-	err := f.makeBucket(ctx, dstBucket)
-	if err != nil {
-		return nil, err
-	}
+	// err := f.makeBucket(ctx, dstBucket)
+	// if err != nil {
+	// 	return nil, err
+	// }
 	srcObj, ok := src.(*Object)
 	if !ok {
 		fs.Debugf(src, "Can't copy - not same remote type")
@@ -2011,10 +2011,10 @@ var warnStreamUpload sync.Once
 // Update the Object from in with modTime and size
 func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) error {
 	bucket, bucketPath := o.split()
-	err := o.fs.makeBucket(ctx, bucket)
-	if err != nil {
-		return err
-	}
+	// err := o.fs.makeBucket(ctx, bucket)
+	// if err != nil {
+	// 	return err
+	// }
 	// modTime := src.ModTime(ctx)
 	size := src.Size()
 
