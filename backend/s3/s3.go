@@ -834,7 +834,7 @@ type Options struct {
 type Fs struct {
 	name          string           // the name of the remote
 	root          string           // root of the bucket - ignore all objects above this
-	opt           Options          // parsed options
+	Opt           Options          // parsed options
 	features      *fs.Features     // optional features
 	c             *s3.S3           // the connection to the s3 server
 	ses           *session.Session // the s3 session
@@ -1064,7 +1064,7 @@ func checkUploadChunkSize(cs fs.SizeSuffix) error {
 func (f *Fs) setUploadChunkSize(cs fs.SizeSuffix) (old fs.SizeSuffix, err error) {
 	err = checkUploadChunkSize(cs)
 	if err == nil {
-		old, f.opt.ChunkSize = f.opt.ChunkSize, cs
+		old, f.Opt.ChunkSize = f.Opt.ChunkSize, cs
 	}
 	return
 }
@@ -1079,7 +1079,7 @@ func checkUploadCutoff(cs fs.SizeSuffix) error {
 func (f *Fs) setUploadCutoff(cs fs.SizeSuffix) (old fs.SizeSuffix, err error) {
 	err = checkUploadCutoff(cs)
 	if err == nil {
-		old, f.opt.UploadCutoff = f.opt.UploadCutoff, cs
+		old, f.Opt.UploadCutoff = f.Opt.UploadCutoff, cs
 	}
 	return
 }
@@ -1118,7 +1118,7 @@ func NewFs(name, root string, m configmap.Mapper) (fs.Fs, error) {
 	}
 	f := &Fs{
 		name:  name,
-		opt:   *opt,
+		Opt:   *opt,
 		c:     c,
 		ses:   ses,
 		pacer: fs.NewPacer(pacer.NewS3(pacer.MinSleep(minSleep))),
@@ -1225,9 +1225,9 @@ func (f *Fs) updateRegionForBucket(bucket string) error {
 	}
 
 	// Make a new session with the new region
-	oldRegion := f.opt.Region
-	f.opt.Region = region
-	c, ses, err := s3Connection(&f.opt)
+	oldRegion := f.Opt.Region
+	f.Opt.Region = region
+	c, ses, err := s3Connection(&f.Opt)
 	if err != nil {
 		return errors.Wrap(err, "creating new session failed")
 	}
@@ -1235,6 +1235,21 @@ func (f *Fs) updateRegionForBucket(bucket string) error {
 	f.ses = ses
 
 	fs.Logf(f, "Switched region to %q from %q", region, oldRegion)
+	return nil
+}
+
+// UpdateCredential renew the connection for the new credential
+func (f *Fs) UpdateCredential(ak string, sk string) error {
+	f.Opt.EnvAuth = false
+	f.Opt.AccessKeyID = ak
+	f.Opt.SecretAccessKey = sk
+	c, ses, err := s3Connection(&f.Opt)
+	if err != nil {
+		return errors.Wrap(err, "creating new session failed")
+	}
+	f.c = c
+	f.ses = ses
+
 	return nil
 }
 
@@ -1275,7 +1290,7 @@ func (f *Fs) list(ctx context.Context, bucket, directory, prefix string, addBuck
 	//
 	// So we enable only on providers we know supports it properly, all others can retry when a
 	// XML Syntax error is detected.
-	var urlEncodeListings = (f.opt.Provider == "AWS" || f.opt.Provider == "Wasabi" || f.opt.Provider == "Alibaba")
+	var urlEncodeListings = (f.Opt.Provider == "AWS" || f.Opt.Provider == "Wasabi" || f.Opt.Provider == "Alibaba")
 	for {
 		// FIXME need to implement ALL loop
 		req := s3.ListObjectsInput{
@@ -1591,11 +1606,11 @@ func (f *Fs) makeBucket(ctx context.Context, bucket string) error {
 	return f.cache.Create(bucket, func() error {
 		req := s3.CreateBucketInput{
 			Bucket: &bucket,
-			ACL:    &f.opt.BucketACL,
+			ACL:    &f.Opt.BucketACL,
 		}
-		if f.opt.LocationConstraint != "" {
+		if f.Opt.LocationConstraint != "" {
 			req.CreateBucketConfiguration = &s3.CreateBucketConfiguration{
-				LocationConstraint: &f.opt.LocationConstraint,
+				LocationConstraint: &f.Opt.LocationConstraint,
 			}
 		}
 		err := f.pacer.Call(func() (bool, error) {
@@ -1603,7 +1618,7 @@ func (f *Fs) makeBucket(ctx context.Context, bucket string) error {
 			return f.shouldRetry(err)
 		})
 		if err == nil {
-			fs.Infof(f, "Bucket %q created with ACL %q", bucket, f.opt.BucketACL)
+			fs.Infof(f, "Bucket %q created with ACL %q", bucket, f.Opt.BucketACL)
 		}
 		if err, ok := err.(awserr.Error); ok {
 			if err.Code() == "BucketAlreadyOwnedByYou" {
@@ -1656,21 +1671,21 @@ func pathEscape(s string) string {
 // method
 func (f *Fs) copy(ctx context.Context, req *s3.CopyObjectInput, dstBucket, dstPath, srcBucket, srcPath string, srcSize int64) error {
 	req.Bucket = &dstBucket
-	req.ACL = &f.opt.ACL
+	req.ACL = &f.Opt.ACL
 	req.Key = &dstPath
 	source := pathEscape(path.Join(srcBucket, srcPath))
 	req.CopySource = &source
-	if f.opt.ServerSideEncryption != "" {
-		req.ServerSideEncryption = &f.opt.ServerSideEncryption
+	if f.Opt.ServerSideEncryption != "" {
+		req.ServerSideEncryption = &f.Opt.ServerSideEncryption
 	}
-	if f.opt.SSEKMSKeyID != "" {
-		req.SSEKMSKeyId = &f.opt.SSEKMSKeyID
+	if f.Opt.SSEKMSKeyID != "" {
+		req.SSEKMSKeyId = &f.Opt.SSEKMSKeyID
 	}
-	if req.StorageClass == nil && f.opt.StorageClass != "" {
-		req.StorageClass = &f.opt.StorageClass
+	if req.StorageClass == nil && f.Opt.StorageClass != "" {
+		req.StorageClass = &f.Opt.StorageClass
 	}
 
-	if srcSize >= int64(f.opt.CopyCutoff) {
+	if srcSize >= int64(f.Opt.CopyCutoff) {
 		return f.copyMultipart(ctx, req, dstBucket, dstPath, srcBucket, srcPath, srcSize)
 	}
 	return f.pacer.Call(func() (bool, error) {
@@ -1721,7 +1736,7 @@ func (f *Fs) copyMultipart(ctx context.Context, req *s3.CopyObjectInput, dstBuck
 		}
 	}()
 
-	partSize := int64(f.opt.CopyCutoff)
+	partSize := int64(f.Opt.CopyCutoff)
 	numParts := (srcSize-1)/partSize + 1
 
 	var parts []*s3.CompletedPart
@@ -2018,14 +2033,14 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	// modTime := src.ModTime(ctx)
 	size := src.Size()
 
-	multipart := size < 0 || size >= int64(o.fs.opt.UploadCutoff)
+	multipart := size < 0 || size >= int64(o.fs.Opt.UploadCutoff)
 	var uploader *s3manager.Uploader
 	if multipart {
 		uploader = s3manager.NewUploader(o.fs.ses, func(u *s3manager.Uploader) {
-			u.Concurrency = o.fs.opt.UploadConcurrency
-			u.LeavePartsOnError = o.fs.opt.LeavePartsOnError
+			u.Concurrency = o.fs.Opt.UploadConcurrency
+			u.LeavePartsOnError = o.fs.Opt.LeavePartsOnError
 			u.S3 = o.fs.c
-			u.PartSize = int64(o.fs.opt.ChunkSize)
+			u.PartSize = int64(o.fs.Opt.ChunkSize)
 
 			// size can be -1 here meaning we don't know the size of the incoming file.  We use ChunkSize
 			// buffers here (default 5MB). With a maximum number of parts (10,000) this will be a file of
@@ -2033,7 +2048,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 			if size == -1 {
 				warnStreamUpload.Do(func() {
 					fs.Logf(o.fs, "Streaming uploads using chunk size %v will have maximum file size of %v",
-						o.fs.opt.ChunkSize, fs.SizeSuffix(u.PartSize*s3manager.MaxUploadParts))
+						o.fs.Opt.ChunkSize, fs.SizeSuffix(u.PartSize*s3manager.MaxUploadParts))
 				})
 				return
 			}
@@ -2053,7 +2068,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	// read the md5sum if available for non multpart and if
 	// disable checksum isn't present.
 	var md5sum string
-	if !multipart && !o.fs.opt.DisableChecksum {
+	if !multipart && !o.fs.Opt.DisableChecksum {
 		hash, err := src.Hash(ctx, hash.MD5)
 		if err == nil && matchMd5.MatchString(hash) {
 			hashBytes, err := hex.DecodeString(hash)
@@ -2071,21 +2086,21 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	if multipart {
 		req := s3manager.UploadInput{
 			Bucket:      &bucket,
-			ACL:         &o.fs.opt.ACL,
+			ACL:         &o.fs.Opt.ACL,
 			Key:         &bucketPath,
 			Body:        in,
 			ContentType: &mimeType,
 			Metadata:    metadata,
 			//ContentLength: &size,
 		}
-		if o.fs.opt.ServerSideEncryption != "" {
-			req.ServerSideEncryption = &o.fs.opt.ServerSideEncryption
+		if o.fs.Opt.ServerSideEncryption != "" {
+			req.ServerSideEncryption = &o.fs.Opt.ServerSideEncryption
 		}
-		if o.fs.opt.SSEKMSKeyID != "" {
-			req.SSEKMSKeyId = &o.fs.opt.SSEKMSKeyID
+		if o.fs.Opt.SSEKMSKeyID != "" {
+			req.SSEKMSKeyId = &o.fs.Opt.SSEKMSKeyID
 		}
-		if o.fs.opt.StorageClass != "" {
-			req.StorageClass = &o.fs.opt.StorageClass
+		if o.fs.Opt.StorageClass != "" {
+			req.StorageClass = &o.fs.Opt.StorageClass
 		}
 		err := o.fs.pacer.CallNoRetry(func() (bool, error) {
 			_, err := uploader.UploadWithContext(ctx, &req)
@@ -2097,7 +2112,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	} else {
 		req := s3.PutObjectInput{
 			Bucket:      &bucket,
-			ACL:         &o.fs.opt.ACL,
+			ACL:         &o.fs.Opt.ACL,
 			Key:         &bucketPath,
 			ContentType: &mimeType,
 			Metadata:    metadata,
@@ -2105,14 +2120,14 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 		if md5sum != "" {
 			req.ContentMD5 = &md5sum
 		}
-		if o.fs.opt.ServerSideEncryption != "" {
-			req.ServerSideEncryption = &o.fs.opt.ServerSideEncryption
+		if o.fs.Opt.ServerSideEncryption != "" {
+			req.ServerSideEncryption = &o.fs.Opt.ServerSideEncryption
 		}
-		if o.fs.opt.SSEKMSKeyID != "" {
-			req.SSEKMSKeyId = &o.fs.opt.SSEKMSKeyID
+		if o.fs.Opt.SSEKMSKeyID != "" {
+			req.SSEKMSKeyId = &o.fs.Opt.SSEKMSKeyID
 		}
-		if o.fs.opt.StorageClass != "" {
-			req.StorageClass = &o.fs.opt.StorageClass
+		if o.fs.Opt.StorageClass != "" {
+			req.StorageClass = &o.fs.Opt.StorageClass
 		}
 
 		// Create the request
@@ -2127,7 +2142,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 			return errors.Wrap(err, "s3 upload: sign request")
 		}
 
-		if o.fs.opt.V2Auth && headers == nil {
+		if o.fs.Opt.V2Auth && headers == nil {
 			headers = putObj.HTTPRequest.Header
 		}
 
